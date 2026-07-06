@@ -1,0 +1,47 @@
+{
+  "title": "Ekip",
+  "addButton": "Kullanıcı Ekle",
+  "table": {
+    "fullName": "Ad Soyad",
+    "email": "E-posta",
+    "role": "Rol",
+    "status": "Durum",
+    "actions": "İşlemler"
+  },
+  "roles": {
+    "ORG_ADMIN": "Org Admin",
+    "AGENT": "Danışman"
+  },
+  "status": {
+    "active": "Aktif",
+    "passive": "Pasif"
+  },
+  "actions": {
+    "activate": "Aktifleştir",
+    "deactivate": "Pasifleştir",
+    "resetPassword": "Şifre Sıfırla"
+  },
+  "createUser": {
+    "title": "Kullanıcı Ekle",
+    "fullNameLabel": "Ad Soyad",
+    "emailLabel": "E-posta",
+    "passwordLabel": "Şifre",
+    "roleLabel": "Rol",
+    "submit": "Ekle",
+    "submitting": "Ekleniyor..."
+  },
+  "resetPassword": {
+    "title": "Şifre Sıfırla",
+    "passwordLabel": "Yeni Şifre",
+    "submit": "Sıfırla",
+    "submitting": "Sıfırlanıyor..."
+  },
+  "cancel": "Vazgeç",
+  "errors": {
+    "fullNameRequired": "Ad soyad gereklidir",
+    "emailInvalid": "Geçerli bir e-posta adresi girin",
+    "passwordTooShort": "Şifre en az 8 karakter olmalıdır",
+    "emailConflict": "Bu e-posta adresi zaten kayıtlı",
+    "generic": "Bir hata oluştu, lütfen tekrar deneyin"
+  }
+}

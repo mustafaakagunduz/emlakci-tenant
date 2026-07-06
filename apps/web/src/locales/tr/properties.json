@@ -1,0 +1,130 @@
+{
+  "list": {
+    "title": "Portföy",
+    "newButton": "Taşınmaz Ekle",
+    "searchPlaceholder": "Başlık, adres veya mal sahibi ara...",
+    "empty": "Henüz taşınmaz yok",
+    "table": {
+      "title": "Başlık",
+      "type": "Tip",
+      "listingType": "İlan Tipi",
+      "price": "Fiyat",
+      "district": "İlçe",
+      "status": "Durum",
+      "actions": "İşlemler"
+    },
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "confirmDeleteTitle": "Taşınmazı Sil",
+    "confirmDeleteMessage": "Bu taşınmazı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+    "confirm": "Sil",
+    "cancel": "Vazgeç"
+  },
+  "propertyTypes": {
+    "APARTMENT": "Daire",
+    "SHOP": "Dükkan",
+    "LAND": "Arsa",
+    "VILLA": "Villa",
+    "OFFICE": "Ofis",
+    "BUILDING": "Bina",
+    "OTHER": "Diğer"
+  },
+  "listingTypes": {
+    "SALE": "Satılık",
+    "RENT": "Kiralık"
+  },
+  "statuses": {
+    "ACTIVE": "Aktif",
+    "SOLD": "Satıldı",
+    "RENTED": "Kiralandı",
+    "PASSIVE": "Pasif"
+  },
+  "form": {
+    "newTitle": "Yeni Taşınmaz",
+    "editTitle": "Taşınmazı Düzenle",
+    "sections": {
+      "basic": "Temel Bilgiler",
+      "location": "Konum",
+      "details": "Detaylar",
+      "owner": "Mal Sahibi",
+      "description": "Açıklama"
+    },
+    "fields": {
+      "title": "Başlık",
+      "propertyType": "Taşınmaz Tipi",
+      "listingType": "İlan Tipi",
+      "status": "Durum",
+      "price": "Fiyat",
+      "currency": "Para Birimi",
+      "city": "İl",
+      "district": "İlçe",
+      "neighborhood": "Mahalle",
+      "addressText": "Açık Adres",
+      "description": "Açıklama",
+      "ownerName": "Mal Sahibi Adı",
+      "ownerPhone": "Mal Sahibi Telefonu",
+      "ownerHint": "Bu bilgi yalnızca ofis içi kullanım içindir, ilanlarda gösterilmez.",
+      "roomCount": "Oda Sayısı",
+      "grossM2": "Brüt m²",
+      "netM2": "Net m²",
+      "buildingAge": "Bina Yaşı",
+      "floor": "Bulunduğu Kat",
+      "totalFloors": "Toplam Kat",
+      "heatingType": "Isıtma Tipi",
+      "monthlyFee": "Aidat",
+      "isFurnished": "Eşyalı",
+      "zoningStatus": "İmar Durumu",
+      "blockNo": "Ada No",
+      "parcelNo": "Parsel No"
+    },
+    "submit": "Kaydet",
+    "submitting": "Kaydediliyor...",
+    "cancel": "Vazgeç"
+  },
+  "map": {
+    "filters": {
+      "search": "Başlık, adres veya mal sahibi ara...",
+      "allTypes": "Tüm Tipler",
+      "allListingTypes": "Tüm İlan Tipleri",
+      "allStatuses": "Tüm Durumlar",
+      "minPrice": "Min Fiyat",
+      "maxPrice": "Max Fiyat",
+      "clear": "Filtreleri Temizle",
+      "openButton": "Filtreler",
+      "title": "Filtreler",
+      "apply": "Uygula"
+    },
+    "summary": {
+      "close": "Kapat",
+      "goToDetail": "Detaya Git"
+    },
+    "mobile": {
+      "mapTab": "Harita",
+      "listTab": "Liste"
+    },
+    "pagination": {
+      "pageOf": "Sayfa {{page}} / {{total}}"
+    },
+    "empty": "Bu filtrelerle eşleşen taşınmaz yok"
+  },
+  "detail": {
+    "sections": {
+      "basic": "Temel Bilgiler"
+    },
+    "ownerBlockTitle": "Mal Sahibi (Ofis İçi Bilgi)",
+    "yes": "Evet",
+    "no": "Hayır",
+    "loading": "Yükleniyor..."
+  },
+  "errors": {
+    "titleRequired": "Başlık gereklidir",
+    "priceRequired": "Fiyat gereklidir",
+    "pricePositive": "Fiyat pozitif bir sayı olmalıdır",
+    "cityRequired": "İl gereklidir",
+    "districtRequired": "İlçe gereklidir",
+    "neighborhoodRequired": "Mahalle gereklidir",
+    "addressRequired": "Açık adres gereklidir",
+    "locationRequired": "Haritadan konum seçmelisiniz",
+    "generic": "Bir hata oluştu, lütfen tekrar deneyin"
+  }
+}

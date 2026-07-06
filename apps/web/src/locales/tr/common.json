@@ -1,0 +1,14 @@
+{
+  "appName": "EmlakPanel",
+  "dashboard": {
+    "welcome": "Hoş geldiniz, {{fullName}}",
+    "organization": "Organizasyon: {{organizationId}}",
+    "logout": "Çıkış Yap"
+  },
+  "logout": "Çıkış Yap",
+  "back": "Geri",
+  "nav": {
+    "properties": "Portföy",
+    "team": "Ekip"
+  }
+}

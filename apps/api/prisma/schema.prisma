@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ORG_ADMIN
+  AGENT
+}
+
+enum PropertyType {
+  APARTMENT
+  SHOP
+  LAND
+  VILLA
+  OFFICE
+  BUILDING
+  OTHER
+}
+
+enum ListingType {
+  SALE
+  RENT
+}
+
+enum PropertyStatus {
+  ACTIVE
+  SOLD
+  RENTED
+  PASSIVE
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users      User[]
+  properties Property[]
+}
+
+model User {
+  id             String        @id @default(uuid())
+  email          String        @unique
+  passwordHash   String
+  fullName       String
+  role           Role
+  // SUPER_ADMIN için null; org kullanıcıları için zorunlu.
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  isActive       Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  createdProperties Property[] @relation("PropertyCreatedBy")
+}
+
+model Property {
+  id             String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdById    String
+  createdBy      User     @relation("PropertyCreatedBy", fields: [createdById], references: [id])
+
+  title        String
+  propertyType PropertyType
+  listingType  ListingType
+  status       PropertyStatus @default(ACTIVE)
+
+  price    Decimal @db.Decimal(12, 2)
+  currency String  @default("TRY")
+
+  city         String
+  district     String
+  neighborhood String
+  addressText  String
+  latitude     Float
+  longitude    Float
+
+  description String?
+  ownerName   String?
+  ownerPhone  String?
+
+  // Tipe özgü alanlar (APARTMENT/VILLA/OFFICE/BUILDING/SHOP/LAND) — hepsi nullable, tek düz tablo.
+  roomCount    String?
+  grossM2      Float?
+  netM2        Float?
+  buildingAge  Int?
+  floor        Int?
+  totalFloors  Int?
+  heatingType  String?
+  monthlyFee   Decimal? @db.Decimal(10, 2)
+  isFurnished  Boolean?
+  zoningStatus String?
+  blockNo      String?
+  parcelNo     String?
+
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  photos PropertyPhoto[]
+
+  @@index([organizationId, deletedAt])
+  @@index([organizationId, status])
+  @@index([organizationId, propertyType])
+  @@index([organizationId, listingType])
+  @@index([organizationId, city])
+  @@index([organizationId, district])
+}
+
+model PropertyPhoto {
+  id                String   @id @default(uuid())
+  propertyId        String
+  property          Property @relation(fields: [propertyId], references: [id])
+  cloudinaryPublicId String
+  url               String
+  isCover           Boolean  @default(false)
+  sortOrder         Int      @default(0)
+  createdAt         DateTime @default(now())
+
+  @@index([propertyId])
+}

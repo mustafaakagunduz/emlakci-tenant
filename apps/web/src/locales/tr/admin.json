@@ -1,0 +1,77 @@
+{
+  "title": "Super Admin Paneli",
+  "backToList": "Organizasyonlara Dön",
+  "organizations": {
+    "title": "Organizasyonlar",
+    "newButton": "Yeni Organizasyon",
+    "table": {
+      "name": "Ad",
+      "status": "Durum",
+      "userCount": "Kullanıcı Sayısı",
+      "createdAt": "Oluşturulma Tarihi"
+    },
+    "empty": "Henüz organizasyon yok"
+  },
+  "status": {
+    "active": "Aktif",
+    "passive": "Pasif"
+  },
+  "createOrganization": {
+    "title": "Yeni Organizasyon",
+    "nameLabel": "Organizasyon Adı",
+    "submit": "Oluştur",
+    "submitting": "Oluşturuluyor..."
+  },
+  "organizationDetail": {
+    "usersTitle": "Kullanıcılar",
+    "addUserButton": "Kullanıcı Ekle",
+    "activate": "Aktifleştir",
+    "deactivate": "Pasifleştir",
+    "confirmDeactivateTitle": "Organizasyonu Pasifleştir",
+    "confirmDeactivateMessage": "Bu organizasyonu pasifleştirirseniz altındaki tüm kullanıcılar anında sisteme giriş yapamaz hale gelir. Devam etmek istiyor musunuz?",
+    "confirmActivateTitle": "Organizasyonu Aktifleştir",
+    "confirmActivateMessage": "Bu organizasyonu tekrar aktifleştirmek istiyor musunuz?",
+    "confirm": "Onayla",
+    "cancel": "Vazgeç"
+  },
+  "usersTable": {
+    "fullName": "Ad Soyad",
+    "email": "E-posta",
+    "role": "Rol",
+    "status": "Durum",
+    "actions": "İşlemler"
+  },
+  "roles": {
+    "ORG_ADMIN": "Org Admin",
+    "AGENT": "Danışman"
+  },
+  "userActions": {
+    "activate": "Aktifleştir",
+    "deactivate": "Pasifleştir",
+    "resetPassword": "Şifre Sıfırla",
+    "cannotDeactivateSelf": "Kendi hesabınızı pasifleştiremezsiniz"
+  },
+  "createUser": {
+    "title": "Kullanıcı Ekle",
+    "fullNameLabel": "Ad Soyad",
+    "emailLabel": "E-posta",
+    "passwordLabel": "Şifre",
+    "roleLabel": "Rol",
+    "submit": "Ekle",
+    "submitting": "Ekleniyor..."
+  },
+  "resetPassword": {
+    "title": "Şifre Sıfırla",
+    "passwordLabel": "Yeni Şifre",
+    "submit": "Sıfırla",
+    "submitting": "Sıfırlanıyor..."
+  },
+  "errors": {
+    "nameRequired": "Organizasyon adı gereklidir",
+    "fullNameRequired": "Ad soyad gereklidir",
+    "emailInvalid": "Geçerli bir e-posta adresi girin",
+    "passwordTooShort": "Şifre en az 8 karakter olmalıdır",
+    "emailConflict": "Bu e-posta adresi zaten kayıtlı",
+    "generic": "Bir hata oluştu, lütfen tekrar deneyin"
+  }
+}
