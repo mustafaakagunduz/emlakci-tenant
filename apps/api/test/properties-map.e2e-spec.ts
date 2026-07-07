@@ -67,6 +67,7 @@ describe('Properties map-markers (e2e)', () => {
     const marker = res.body[0];
     expect(Object.keys(marker).sort()).toEqual(
       [
+        'coverPhotoUrl',
         'currency',
         'district',
         'id',

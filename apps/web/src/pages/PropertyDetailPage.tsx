@@ -6,6 +6,8 @@ import { StaticLocationMap } from '../components/map/StaticLocationMap';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
+import { PhotoLightbox } from '../features/properties/components/PhotoLightbox';
+import { cloudinaryUrl } from '../lib/cloudinary';
 import { formatPrice, statusTone } from '../features/properties/format';
 import { useDeleteProperty, useProperty } from '../features/properties/hooks';
 
@@ -25,6 +27,7 @@ export function PropertyDetailPage() {
   const { data: property, isLoading } = useProperty(id ?? '');
   const deleteProperty = useDeleteProperty();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   if (isLoading || !property) {
     return (
@@ -68,6 +71,9 @@ export function PropertyDetailPage() {
               <DetailField label={t('form.fields.city')} value={property.city} />
               <DetailField label={t('form.fields.district')} value={property.district} />
               <DetailField label={t('form.fields.neighborhood')} value={property.neighborhood} />
+              {property.street && (
+                <DetailField label={t('form.fields.street')} value={property.street} />
+              )}
               {property.roomCount && (
                 <DetailField label={t('form.fields.roomCount')} value={property.roomCount} />
               )}
@@ -133,7 +139,29 @@ export function PropertyDetailPage() {
             </dl>
           </section>
 
-          {/* Fotoğraflar — Faz 5 */}
+          <section>
+            <h2 className="mb-3 text-lg font-medium text-gray-900">{t('photos.title')}</h2>
+            {property.photos && property.photos.length > 0 ? (
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                {property.photos.map((photo, index) => (
+                  <button
+                    key={photo.id}
+                    type="button"
+                    onClick={() => setLightboxIndex(index)}
+                    className="aspect-square overflow-hidden rounded-md border border-gray-200"
+                  >
+                    <img
+                      src={cloudinaryUrl(photo.url, { w: 300, h: 300 })}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">{t('photos.empty')}</p>
+            )}
+          </section>
         </div>
 
         <div className="space-y-3">
@@ -142,6 +170,15 @@ export function PropertyDetailPage() {
           <p className="text-sm text-gray-700">{property.addressText}</p>
         </div>
       </div>
+
+      {lightboxIndex !== null && property.photos && (
+        <PhotoLightbox
+          photos={property.photos}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onIndexChange={setLightboxIndex}
+        />
+      )}
 
       <ConfirmDialog
         open={confirmOpen}

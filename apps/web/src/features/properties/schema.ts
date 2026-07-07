@@ -35,6 +35,7 @@ export const propertySchema = z
     city: z.string().min(1, 'errors.cityRequired'),
     district: z.string().min(1, 'errors.districtRequired'),
     neighborhood: z.string().min(1, 'errors.neighborhoodRequired'),
+    street: z.string().optional(),
     addressText: z.string().min(1, 'errors.addressRequired'),
     latitude: z.number({ error: 'errors.locationRequired' }),
     longitude: z.number({ error: 'errors.locationRequired' }),

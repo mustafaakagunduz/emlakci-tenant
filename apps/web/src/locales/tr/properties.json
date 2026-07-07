@@ -59,6 +59,7 @@
       "city": "İl",
       "district": "İlçe",
       "neighborhood": "Mahalle",
+      "street": "Sokak/Cadde",
       "addressText": "Açık Adres",
       "description": "Açıklama",
       "ownerName": "Mal Sahibi Adı",
@@ -79,7 +80,19 @@
     },
     "submit": "Kaydet",
     "submitting": "Kaydediliyor...",
-    "cancel": "Vazgeç"
+    "cancel": "Vazgeç",
+    "location": {
+      "cityPlaceholder": "İl yazın (örn. Ankara)",
+      "districtPlaceholder": "Önce il seçin",
+      "districtPlaceholderReady": "İlçe yazın",
+      "neighborhoodPlaceholder": "Önce ilçe seçin",
+      "neighborhoodPlaceholderReady": "Mahalle yazın",
+      "streetPlaceholder": "Önce mahalle seçin",
+      "streetPlaceholderReady": "Sokak/cadde yazın",
+      "emptyOptions": "Sonuç yok",
+      "locating": "Konum bulunuyor…",
+      "mapHint": "Haritadan konum seçin veya pini sürükleyerek ince ayar yapın"
+    }
   },
   "map": {
     "filters": {
@@ -115,6 +128,24 @@
     "yes": "Evet",
     "no": "Hayır",
     "loading": "Yükleniyor..."
+  },
+  "photos": {
+    "title": "Fotoğraflar",
+    "addButton": "Fotoğraf Ekle",
+    "cover": "Kapak",
+    "makeCover": "Kapak Yap",
+    "delete": "Sil",
+    "confirmDeleteTitle": "Fotoğrafı Sil",
+    "confirmDeleteMessage": "Bu fotoğrafı silmek istediğinize emin misiniz?",
+    "confirm": "Sil",
+    "cancel": "Vazgeç",
+    "uploading": "Yükleniyor",
+    "uploadError": "Yüklenemedi",
+    "invalidType": "Yalnızca görsel dosyaları yüklenebilir",
+    "tooLarge": "Dosya 10MB'dan büyük olamaz",
+    "empty": "Henüz fotoğraf eklenmedi",
+    "createdHint": "Taşınmaz oluşturuldu. Şimdi fotoğraf ekleyebilirsiniz.",
+    "serviceUnavailable": "Fotoğraf yükleme şu anda kullanılamıyor (Cloudinary yapılandırılmamış)"
   },
   "errors": {
     "titleRequired": "Başlık gereklidir",

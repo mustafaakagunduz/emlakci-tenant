@@ -56,6 +56,10 @@ export class UpdatePropertyDto {
 
   @IsOptional()
   @IsString()
+  street?: string;
+
+  @IsOptional()
+  @IsString()
   @IsNotEmpty()
   addressText?: string;
 

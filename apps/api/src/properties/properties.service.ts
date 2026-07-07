@@ -68,15 +68,22 @@ export class PropertiesService {
     const limit = Number(filters.limit) || 20;
     const where = this.scopeActive(this.buildFilterWhere(filters));
 
-    const [data, total] = await Promise.all([
+    const [rows, total] = await Promise.all([
       this.prisma.property.findMany({
         where,
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
+        include: { photos: { where: { isCover: true }, take: 1 } },
       }),
       this.prisma.property.count({ where }),
     ]);
+
+    // Listede tam photos dizisi taşınmaz, yalnızca kapak fotoğrafının URL'i.
+    const data = rows.map(({ photos, ...rest }) => ({
+      ...rest,
+      coverPhotoUrl: photos[0]?.url ?? null,
+    }));
 
     return { data, meta: { page, limit, total } };
   }
@@ -87,7 +94,7 @@ export class PropertiesService {
    * kayıtlar (liste ile harita her zaman aynı filtre setine göre senkron).
    */
   async findMapMarkers(filters: PropertyFilterDto) {
-    return this.prisma.property.findMany({
+    const rows = await this.prisma.property.findMany({
       where: this.scopeActive(this.buildFilterWhere(filters)),
       select: {
         id: true,
@@ -100,14 +107,21 @@ export class PropertiesService {
         latitude: true,
         longitude: true,
         district: true,
+        photos: { where: { isCover: true }, take: 1, select: { url: true } },
       },
       orderBy: { createdAt: 'desc' },
     });
+
+    return rows.map(({ photos, ...rest }) => ({
+      ...rest,
+      coverPhotoUrl: photos[0]?.url ?? null,
+    }));
   }
 
   async findOne(id: string) {
     const property = await this.prisma.property.findFirst({
       where: this.scopeActive({ id }),
+      include: { photos: { orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }] } },
     });
 
     if (!property) {

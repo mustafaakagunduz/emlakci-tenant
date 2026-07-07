@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
 import { PropertyForm } from '../features/properties/components/PropertyForm';
+import { PhotoManager } from '../features/properties/components/PhotoManager';
 import { useCreateProperty, useProperty, useUpdateProperty } from '../features/properties/hooks';
 import type { PropertyFormInput, PropertyFormValues } from '../features/properties/schema';
 import { ApiError } from '../api/client';
@@ -18,6 +19,7 @@ function toFormDefaults(property: Property): Partial<PropertyFormInput> {
     city: property.city,
     district: property.district,
     neighborhood: property.neighborhood,
+    street: property.street ?? undefined,
     addressText: property.addressText,
     latitude: property.latitude,
     longitude: property.longitude,
@@ -48,14 +50,17 @@ const NEW_DEFAULTS: Partial<PropertyFormInput> = {
   city: '',
   district: '',
   neighborhood: '',
+  street: '',
   addressText: '',
 };
 
 export function PropertyFormPage() {
   const { t } = useTranslation('properties');
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const isEdit = !!id;
+  const justCreated = Boolean((location.state as { justCreated?: boolean } | null)?.justCreated);
 
   const { data: property, isLoading } = useProperty(id ?? '');
   const createProperty = useCreateProperty();
@@ -80,10 +85,11 @@ export function PropertyFormPage() {
   const handleSubmit = async (values: PropertyFormValues) => {
     if (isEdit) {
       await updateProperty.mutateAsync(values);
+      navigate('/');
     } else {
-      await createProperty.mutateAsync(values);
+      const created = await createProperty.mutateAsync(values);
+      navigate(`/properties/${created.id}/edit`, { state: { justCreated: true } });
     }
-    navigate('/');
   };
 
   return (
@@ -91,11 +97,24 @@ export function PropertyFormPage() {
       <h1 className="mb-6 text-xl font-semibold text-gray-900">
         {isEdit ? t('form.editTitle') : t('form.newTitle')}
       </h1>
+
+      {justCreated && (
+        <div className="mb-6 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800">
+          {t('photos.createdHint')}
+        </div>
+      )}
+
       <PropertyForm
         defaultValues={isEdit && property ? toFormDefaults(property) : NEW_DEFAULTS}
         onSubmit={handleSubmit}
         submitError={errorMessage}
       />
+
+      {isEdit && property && (
+        <div className="mt-10 border-t border-gray-200 pt-8">
+          <PhotoManager propertyId={property.id} photos={property.photos ?? []} />
+        </div>
+      )}
     </AppLayout>
   );
 }

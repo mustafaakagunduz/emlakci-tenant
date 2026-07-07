@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
@@ -5,7 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import { Input } from '../../../components/ui/Input';
 import { Select } from '../../../components/ui/Select';
 import { Button } from '../../../components/ui/Button';
+import { Combobox } from '../../../components/ui/Combobox';
 import { LocationPicker } from '../../../components/map/LocationPicker';
+import { useDebouncedValue } from '../../../lib/useDebouncedValue';
+import { useDistricts, useNeighborhoods, useProvinces, useStreets } from '../../geo/hooks';
+import { fetchForwardGeocode, fetchReverseGeocode } from '../../geo/api';
 import {
   fieldsForType,
   listingTypes,
@@ -46,6 +51,128 @@ export function PropertyForm({ defaultValues, onSubmit, submitError }: PropertyF
   const submit = async (values: PropertyFormValues) => {
     await onSubmit(stripIrrelevantFields(values));
   };
+
+  // Konum bölümü: il/ilçe/mahalle Combobox'ları + iki yönlü harita senkronu.
+  const cityValue = watch('city') ?? '';
+  const districtValue = watch('district') ?? '';
+  const neighborhoodValue = watch('neighborhood') ?? '';
+  const streetValue = watch('street') ?? '';
+  const debouncedCityQuery = useDebouncedValue(cityValue, 250);
+  const debouncedDistrictQuery = useDebouncedValue(districtValue, 250);
+  const debouncedNeighborhoodQuery = useDebouncedValue(neighborhoodValue, 250);
+  const debouncedStreetQuery = useDebouncedValue(streetValue, 250);
+
+  const { data: provinceOptions = [], isFetching: provincesLoading } =
+    useProvinces(debouncedCityQuery);
+  const { data: districtOptions = [], isFetching: districtsLoading } = useDistricts(
+    cityValue,
+    debouncedDistrictQuery,
+  );
+  const { data: neighborhoodOptions = [], isFetching: neighborhoodsLoading } = useNeighborhoods(
+    cityValue,
+    districtValue,
+    debouncedNeighborhoodQuery,
+  );
+  const { data: streetOptions = [], isFetching: streetsLoading } = useStreets(
+    cityValue,
+    districtValue,
+    neighborhoodValue,
+    debouncedStreetQuery,
+  );
+
+  const [flyTarget, setFlyTarget] = useState<{ lat: number; lng: number; zoom: number } | null>(
+    null,
+  );
+  const [isLocating, setIsLocating] = useState(false);
+  const reverseTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  useEffect(() => {
+    return () => {
+      if (reverseTimeoutRef.current) clearTimeout(reverseTimeoutRef.current);
+    };
+  }, []);
+
+  function handleSelectProvince(name: string) {
+    setValue('city', name, { shouldValidate: true });
+    setValue('district', '', { shouldValidate: true });
+    setValue('neighborhood', '', { shouldValidate: true });
+    setValue('street', '', { shouldValidate: true });
+    const province = provinceOptions.find((p) => p.name === name);
+    if (province) {
+      setFlyTarget({ lat: province.lat, lng: province.lng, zoom: 10 });
+    }
+  }
+
+  function handleSelectDistrict(name: string) {
+    setValue('district', name, { shouldValidate: true });
+    setValue('neighborhood', '', { shouldValidate: true });
+    setValue('street', '', { shouldValidate: true });
+    const district = districtOptions.find((d) => d.name === name);
+    if (district && district.lat != null && district.lng != null) {
+      setFlyTarget({ lat: district.lat, lng: district.lng, zoom: 13 });
+    }
+  }
+
+  async function handleSelectNeighborhood(name: string) {
+    setValue('neighborhood', name, { shouldValidate: true });
+    setValue('street', '', { shouldValidate: true });
+    if (!cityValue || !districtValue) return;
+    setIsLocating(true);
+    try {
+      const coords = await fetchForwardGeocode({
+        province: cityValue,
+        district: districtValue,
+        neighborhood: name,
+      });
+      if (coords) {
+        setFlyTarget({ lat: coords.lat, lng: coords.lng, zoom: 16 });
+      }
+    } finally {
+      setIsLocating(false);
+    }
+  }
+
+  async function handleSelectStreet(name: string) {
+    setValue('street', name, { shouldValidate: true });
+    if (!cityValue || !districtValue) return;
+    setIsLocating(true);
+    try {
+      const coords = await fetchForwardGeocode({
+        province: cityValue,
+        district: districtValue,
+        neighborhood: neighborhoodValue || undefined,
+        street: name,
+      });
+      if (coords) {
+        setFlyTarget({ lat: coords.lat, lng: coords.lng, zoom: 17 });
+      }
+    } finally {
+      setIsLocating(false);
+    }
+  }
+
+  // Harita → alanlar: tıklama/sürükleme pini hemen taşır, reverse-geocode 300ms
+  // debounce'lu tetiklenir (spec'teki döngü koruması: bu yalnızca kullanıcının
+  // haritayla etkileşiminde çalışır, alan seçimlerinin tetiklediği flyTo bunu
+  // TETİKLEMEZ — iki yön birbirinden bağımsız, imperative çağrılardır).
+  function handleMapChange(lat: number, lng: number) {
+    setValue('latitude', lat, { shouldValidate: true });
+    setValue('longitude', lng, { shouldValidate: true });
+
+    if (reverseTimeoutRef.current) clearTimeout(reverseTimeoutRef.current);
+    reverseTimeoutRef.current = setTimeout(async () => {
+      setIsLocating(true);
+      try {
+        const result = await fetchReverseGeocode(lat, lng);
+        setValue('city', result.province ?? '', { shouldValidate: true });
+        setValue('district', result.district ?? '', { shouldValidate: true });
+        setValue('neighborhood', result.neighborhood ?? '', { shouldValidate: true });
+        setValue('street', result.street ?? '', { shouldValidate: true });
+      } finally {
+        setIsLocating(false);
+      }
+    }, 300);
+  }
 
   return (
     <form onSubmit={handleSubmit(submit)} className="space-y-8">
@@ -98,23 +225,67 @@ export function PropertyForm({ defaultValues, onSubmit, submitError }: PropertyF
       <section>
         <h2 className="mb-4 text-lg font-medium text-gray-900">{t('form.sections.location')}</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Input
+          <Combobox
             id="city"
             label={t('form.fields.city')}
+            placeholder={t('form.location.cityPlaceholder')}
+            value={cityValue}
+            onChange={(value) => setValue('city', value, { shouldValidate: true })}
+            onSelectOption={handleSelectProvince}
+            options={provinceOptions.map((p) => p.name)}
+            loading={provincesLoading}
+            emptyMessage={t('form.location.emptyOptions')}
             error={errors.city && t(errors.city.message ?? '')}
-            {...register('city')}
           />
-          <Input
+          <Combobox
             id="district"
             label={t('form.fields.district')}
+            placeholder={
+              cityValue
+                ? t('form.location.districtPlaceholderReady')
+                : t('form.location.districtPlaceholder')
+            }
+            value={districtValue}
+            onChange={(value) => setValue('district', value, { shouldValidate: true })}
+            onSelectOption={handleSelectDistrict}
+            options={districtOptions.map((d) => d.name)}
+            loading={districtsLoading}
+            disabled={!cityValue}
+            emptyMessage={t('form.location.emptyOptions')}
             error={errors.district && t(errors.district.message ?? '')}
-            {...register('district')}
           />
-          <Input
+          <Combobox
             id="neighborhood"
             label={t('form.fields.neighborhood')}
+            placeholder={
+              districtValue
+                ? t('form.location.neighborhoodPlaceholderReady')
+                : t('form.location.neighborhoodPlaceholder')
+            }
+            value={neighborhoodValue}
+            onChange={(value) => setValue('neighborhood', value, { shouldValidate: true })}
+            onSelectOption={handleSelectNeighborhood}
+            options={neighborhoodOptions}
+            loading={neighborhoodsLoading}
+            disabled={!districtValue}
+            emptyMessage={t('form.location.emptyOptions')}
             error={errors.neighborhood && t(errors.neighborhood.message ?? '')}
-            {...register('neighborhood')}
+          />
+          <Combobox
+            id="street"
+            label={t('form.fields.street')}
+            placeholder={
+              neighborhoodValue
+                ? t('form.location.streetPlaceholderReady')
+                : t('form.location.streetPlaceholder')
+            }
+            value={streetValue}
+            onChange={(value) => setValue('street', value, { shouldValidate: true })}
+            onSelectOption={handleSelectStreet}
+            options={streetOptions}
+            loading={streetsLoading}
+            disabled={!neighborhoodValue}
+            emptyMessage={t('form.location.emptyOptions')}
           />
           <Input
             id="addressText"
@@ -124,13 +295,14 @@ export function PropertyForm({ defaultValues, onSubmit, submitError }: PropertyF
           />
         </div>
         <div className="mt-4">
+          <p className="mb-2 text-sm text-gray-500">{t('form.location.mapHint')}</p>
           <LocationPicker
             latitude={latitude}
             longitude={longitude}
-            onChange={(lat, lng) => {
-              setValue('latitude', lat, { shouldValidate: true });
-              setValue('longitude', lng, { shouldValidate: true });
-            }}
+            onChange={handleMapChange}
+            flyTo={flyTarget}
+            isLocating={isLocating}
+            locatingLabel={t('form.location.locating')}
           />
           {errors.latitude && (
             <p className="mt-1 text-sm text-red-600">{t(errors.latitude.message ?? '')}</p>

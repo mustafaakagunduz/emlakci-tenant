@@ -1,10 +1,12 @@
 import { apiFetch } from '../../api/client';
 import type {
   PaginatedResponse,
+  PhotoSignature,
   Property,
   PropertyFilters,
   PropertyInput,
   PropertyMarker,
+  PropertyPhoto,
 } from './types';
 
 function buildQuery(filters: PropertyFilters): string {
@@ -49,4 +51,26 @@ export function updateProperty(id: string, input: Partial<PropertyInput>): Promi
 
 export function deleteProperty(id: string): Promise<void> {
   return apiFetch(`/properties/${id}`, { method: 'DELETE' });
+}
+
+export function fetchPhotoSignature(propertyId: string): Promise<PhotoSignature> {
+  return apiFetch(`/properties/${propertyId}/photos/signature`, { method: 'POST' });
+}
+
+export function createPropertyPhoto(
+  propertyId: string,
+  input: { cloudinaryPublicId: string; url: string },
+): Promise<PropertyPhoto> {
+  return apiFetch(`/properties/${propertyId}/photos`, {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
+}
+
+export function setCoverPhoto(photoId: string): Promise<PropertyPhoto> {
+  return apiFetch(`/photos/${photoId}/cover`, { method: 'PATCH' });
+}
+
+export function deletePhoto(photoId: string): Promise<void> {
+  return apiFetch(`/photos/${photoId}`, { method: 'DELETE' });
 }

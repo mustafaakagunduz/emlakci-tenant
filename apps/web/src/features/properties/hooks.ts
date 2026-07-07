@@ -2,9 +2,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createProperty,
   deleteProperty,
+  deletePhoto,
   fetchProperties,
   fetchProperty,
   fetchPropertyMarkers,
+  setCoverPhoto,
   updateProperty,
 } from './api';
 import type { PropertyFilters, PropertyInput } from './types';
@@ -59,6 +61,26 @@ export function useDeleteProperty() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteProperty(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['properties'] });
+    },
+  });
+}
+
+export function useSetCoverPhoto() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (photoId: string) => setCoverPhoto(photoId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['properties'] });
+    },
+  });
+}
+
+export function useDeletePhoto() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (photoId: string) => deletePhoto(photoId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
     },

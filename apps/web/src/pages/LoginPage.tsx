@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../features/auth/AuthContext';
 import { loginSchema, type LoginFormValues } from '../features/auth/schema';
+import { Input } from '../components/ui/Input';
+import { Button } from '../components/ui/Button';
 
 export function LoginPage() {
   const { t } = useTranslation('auth');
@@ -31,57 +33,64 @@ export function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-8 shadow-sm"
-      >
-        <h1 className="mb-6 text-center text-2xl font-semibold text-gray-900">
-          {t('title')}
-        </h1>
+    <div className="relative flex min-h-screen w-full overflow-hidden bg-gray-900">
+      <div className="absolute inset-0">
+        <img
+          src="/login-bg.jpg"
+          alt=""
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-l from-gray-900/80 via-gray-900/40 to-transparent md:from-gray-900/70 md:via-gray-900/20" />
+      </div>
 
-        <div className="mb-4">
-          <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
-            {t('email')}
-          </label>
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none"
-            {...register('email')}
-          />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{t(errors.email.message ?? '')}</p>
-          )}
+      <div className="relative z-10 flex w-full items-center justify-center bg-white p-6 shadow-2xl sm:w-[440px] sm:flex-none sm:p-10">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-sm">
+          <div className="mb-8 flex items-center gap-2 text-lg font-semibold text-gray-900">
+            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-gray-900/5 text-base">
+              🏠
+            </span>
+            EmlakPanel
+          </div>
+
+          <h1 className="mb-1 text-2xl font-semibold text-gray-900">{t('title')}</h1>
+          <p className="mb-6 text-sm text-gray-500">{t('subtitle')}</p>
+
+          <div className="mb-4">
+            <Input
+              id="email"
+              type="email"
+              label={t('email')}
+              autoComplete="email"
+              error={errors.email ? t(errors.email.message ?? '') : undefined}
+              {...register('email')}
+            />
+          </div>
+
+          <div className="mb-6">
+            <Input
+              id="password"
+              type="password"
+              label={t('password')}
+              autoComplete="current-password"
+              error={errors.password ? t(errors.password.message ?? '') : undefined}
+              {...register('password')}
+            />
+          </div>
+
+          {formError && <p className="mb-4 text-sm text-red-600">{formError}</p>}
+
+          <Button type="submit" disabled={isSubmitting} className="w-full">
+            {isSubmitting ? t('submitting') : t('submit')}
+          </Button>
+        </form>
+      </div>
+
+      <div className="relative z-10 hidden flex-1 flex-col justify-end p-12 text-white md:flex">
+        <div className="max-w-md self-end text-right">
+          <h2 className="text-3xl font-semibold leading-tight">{t('heroTitle')}</h2>
+          <p className="mt-3 text-sm text-white/70">{t('heroSubtitle')}</p>
         </div>
-
-        <div className="mb-6">
-          <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
-            {t('password')}
-          </label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none"
-            {...register('password')}
-          />
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{t(errors.password.message ?? '')}</p>
-          )}
-        </div>
-
-        {formError && <p className="mb-4 text-sm text-red-600">{formError}</p>}
-
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
-        >
-          {isSubmitting ? t('submitting') : t('submit')}
-        </button>
-      </form>
+      </div>
     </div>
   );
 }

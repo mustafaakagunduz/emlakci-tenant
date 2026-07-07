@@ -9,6 +9,7 @@ import { Modal } from '../components/ui/Modal';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { PropertyFilterBar } from '../features/properties/components/PropertyFilterBar';
 import { PropertySummaryCard } from '../features/properties/components/PropertySummaryCard';
+import { PropertyThumbnail } from '../features/properties/components/PropertyThumbnail';
 import { formatPrice, statusTone } from '../features/properties/format';
 import { useDeleteProperty, useProperties, usePropertyMarkers } from '../features/properties/hooks';
 import type {
@@ -124,9 +125,12 @@ export function PropertiesPage() {
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="font-medium text-gray-900">{property.title}</p>
-                      <p className="text-sm text-gray-500">{property.district}</p>
+                    <div className="flex items-start gap-3">
+                      <PropertyThumbnail url={property.coverPhotoUrl} size={48} />
+                      <div>
+                        <p className="font-medium text-gray-900">{property.title}</p>
+                        <p className="text-sm text-gray-500">{property.district}</p>
+                      </div>
                     </div>
                     <Badge tone={statusTone[property.status]}>
                       {t(`statuses.${property.status}`)}

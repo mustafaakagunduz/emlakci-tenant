@@ -10,6 +10,8 @@ import { TenancyModule } from './common/tenancy/tenancy.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { UsersModule } from './users/users.module';
 import { PropertiesModule } from './properties/properties.module';
+import { PhotosModule } from './photos/photos.module';
+import { GeoModule } from './geo/geo.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { PropertiesModule } from './properties/properties.module';
     OrganizationsModule,
     UsersModule,
     PropertiesModule,
+    PhotosModule,
+    GeoModule,
   ],
   providers: [
     { provide: APP_GUARD, useExisting: JwtAuthGuard },

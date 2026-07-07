@@ -47,6 +47,10 @@ export class CreatePropertyDto {
   @IsNotEmpty()
   neighborhood!: string;
 
+  @IsOptional()
+  @IsString()
+  street?: string;
+
   @IsString()
   @IsNotEmpty()
   addressText!: string;

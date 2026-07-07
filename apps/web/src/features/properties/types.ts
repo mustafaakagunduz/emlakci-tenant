@@ -11,6 +11,24 @@ export type ListingType = 'SALE' | 'RENT';
 
 export type PropertyStatus = 'ACTIVE' | 'SOLD' | 'RENTED' | 'PASSIVE';
 
+export interface PropertyPhoto {
+  id: string;
+  propertyId: string;
+  cloudinaryPublicId: string;
+  url: string;
+  isCover: boolean;
+  sortOrder: number;
+  createdAt: string;
+}
+
+export interface PhotoSignature {
+  timestamp: number;
+  signature: string;
+  apiKey: string;
+  cloudName: string;
+  folder: string;
+}
+
 export interface Property {
   id: string;
   organizationId: string;
@@ -24,6 +42,7 @@ export interface Property {
   city: string;
   district: string;
   neighborhood: string;
+  street: string | null;
   addressText: string;
   latitude: number;
   longitude: number;
@@ -44,6 +63,10 @@ export interface Property {
   parcelNo: string | null;
   createdAt: string;
   updatedAt: string;
+  // Yalnızca liste/map-markers cevabında (kapak URL'i, hafif shape)
+  coverPhotoUrl?: string | null;
+  // Yalnızca detay cevabında (GET /properties/:id, tam dizi)
+  photos?: PropertyPhoto[];
 }
 
 export interface PaginatedResponse<T> {
@@ -75,6 +98,7 @@ export interface PropertyMarker {
   latitude: number;
   longitude: number;
   district: string;
+  coverPhotoUrl: string | null;
 }
 
 export interface PropertyInput {
@@ -87,6 +111,7 @@ export interface PropertyInput {
   city: string;
   district: string;
   neighborhood: string;
+  street?: string;
   addressText: string;
   latitude: number;
   longitude: number;
