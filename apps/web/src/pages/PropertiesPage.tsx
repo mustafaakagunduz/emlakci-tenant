@@ -201,7 +201,7 @@ export function PropertiesPage() {
           type="button"
           onClick={() => setMobileView('map')}
           className={`flex-1 text-sm font-medium ${
-            mobileView === 'map' ? 'text-gray-900' : 'text-gray-400'
+            mobileView === 'map' ? 'bg-gray-200 text-brand-navy' : 'text-brand-blue'
           }`}
         >
           {t('map.mobile.mapTab')}
@@ -210,7 +210,7 @@ export function PropertiesPage() {
           type="button"
           onClick={() => setMobileView('list')}
           className={`flex-1 text-sm font-medium ${
-            mobileView === 'list' ? 'text-gray-900' : 'text-gray-400'
+            mobileView === 'list' ? 'bg-gray-200 text-brand-navy' : 'text-brand-blue'
           }`}
         >
           {t('map.mobile.listTab')}
