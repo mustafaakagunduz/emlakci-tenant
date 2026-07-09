@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cloudinaryUrl } from '../../../lib/cloudinary';
 import type { PropertyPhoto } from '../types';
 
@@ -10,6 +11,7 @@ interface PhotoLightboxProps {
 }
 
 export function PhotoLightbox({ photos, index, onClose, onIndexChange }: PhotoLightboxProps) {
+  const { t } = useTranslation('properties');
   const photo = photos[index];
   const hasMultiple = photos.length > 1;
 
@@ -40,7 +42,7 @@ export function PhotoLightbox({ photos, index, onClose, onIndexChange }: PhotoLi
           e.stopPropagation();
           onClose();
         }}
-        aria-label="Kapat"
+        aria-label={t('photos.ariaClose')}
         className="absolute right-4 top-4 text-2xl text-white/80 hover:text-white"
       >
         ✕
@@ -53,7 +55,7 @@ export function PhotoLightbox({ photos, index, onClose, onIndexChange }: PhotoLi
             e.stopPropagation();
             onIndexChange((index - 1 + photos.length) % photos.length);
           }}
-          aria-label="Önceki"
+          aria-label={t('photos.ariaPrevious')}
           className="absolute left-2 text-4xl text-white/80 hover:text-white sm:left-4"
         >
           ‹
@@ -74,7 +76,7 @@ export function PhotoLightbox({ photos, index, onClose, onIndexChange }: PhotoLi
             e.stopPropagation();
             onIndexChange((index + 1) % photos.length);
           }}
-          aria-label="Sonraki"
+          aria-label={t('photos.ariaNext')}
           className="absolute right-2 text-4xl text-white/80 hover:text-white sm:right-4"
         >
           ›

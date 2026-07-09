@@ -2,13 +2,16 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { KONYA_CENTER, DEFAULT_ZOOM, TILE_URL, TILE_ATTRIBUTION } from '../../lib/mapConstants';
-import type { PropertyMarker, PropertyStatus } from '../../features/properties/types';
+import { statusTone } from '../../features/properties/format';
+import type { PropertyMarker } from '../../features/properties/types';
 
-const STATUS_COLOR: Record<PropertyStatus, string> = {
-  ACTIVE: '#16a34a',
-  SOLD: '#9ca3af',
-  RENTED: '#9ca3af',
-  PASSIVE: '#f87171',
+// Marker renkleri, liste görünümündeki status badge'leriyle aynı tonu kullanır
+// (bkz. features/properties/format.ts -> statusTone) — tek kaynaktan yönetilir.
+const TONE_COLOR: Record<'green' | 'gray' | 'blue' | 'red', string> = {
+  green: '#16a34a',
+  gray: '#9ca3af',
+  blue: '#3b82f6',
+  red: '#f87171',
 };
 const SELECTED_COLOR = '#f59e0b';
 
@@ -63,14 +66,39 @@ function MapSizeAndBounds({ markers }: { markers: PropertyMarker[] }) {
   return null;
 }
 
+// Mobilde seçili marker'ın özet kartı haritanın altına (tab bar'ın üstüne)
+// sabitlenir; marker'ı tam ekran merkezine alırsak kartın hemen arkasında/
+// altında kalıyor. Bu yüzden mobilde hedef noktayı ekranda yukarı kaydırıp
+// (piksel uzayında project/unproject ile) marker'ın karta yer açacak şekilde
+// merkezin üstünde kalmasını sağlıyoruz. Masaüstünde kart sol üstte olduğu
+// için bu kaydırmaya gerek yok.
+const MOBILE_SUMMARY_OFFSET_PX = 220;
+
 function FlyToSelected({ marker }: { marker: PropertyMarker | null }) {
   const map = useMap();
 
   useEffect(() => {
-    if (marker) {
-      map.flyTo([marker.latitude, marker.longitude], Math.max(map.getZoom(), 15), {
-        duration: 0.5,
-      });
+    if (!marker) return;
+
+    // Liste görünümünden harita sekmesine geçerken container aynı render
+    // içinde display:none'dan görünür hale geliyor; Leaflet'in boyutu henüz
+    // tazelenmemiş olabilir. flyTo'dan önce invalidateSize ile güncelliyoruz.
+    map.invalidateSize();
+
+    // Container görünür olmadan (ör. mobilde liste sekmesindeyken) map.getZoom()
+    // undefined dönebilir; Math.max(undefined, 15) NaN üretip flyTo'yu
+    // "Invalid LatLng" hatasıyla çökertir. Bu yüzden geçerli bir sayı değilse
+    // varsayılan zoom'a düş.
+    const currentZoom = map.getZoom();
+    const zoom = Number.isFinite(currentZoom) ? Math.max(currentZoom, 15) : 15;
+    const targetLatLng = L.latLng(marker.latitude, marker.longitude);
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      const point = map.project(targetLatLng, zoom).add([0, MOBILE_SUMMARY_OFFSET_PX / 2]);
+      map.flyTo(map.unproject(point, zoom), zoom, { duration: 0.5 });
+    } else {
+      map.flyTo(targetLatLng, zoom, { duration: 0.5 });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marker?.id]);
@@ -101,7 +129,7 @@ export function MapView({ markers, selectedId, onSelectMarker }: MapViewProps) {
           <Marker
             key={marker.id}
             position={[marker.latitude, marker.longitude]}
-            icon={pinIcon(selected ? SELECTED_COLOR : STATUS_COLOR[marker.status], selected ? 36 : 26)}
+            icon={pinIcon(selected ? SELECTED_COLOR : TONE_COLOR[statusTone[marker.status]], selected ? 36 : 26)}
             eventHandlers={{ click: () => onSelectMarker(marker.id) }}
           />
         );

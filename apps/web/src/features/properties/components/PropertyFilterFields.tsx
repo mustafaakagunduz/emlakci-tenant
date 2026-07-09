@@ -6,7 +6,7 @@ import { Button } from '../../../components/ui/Button';
 import { listingTypes, propertyStatuses, propertyTypes } from '../schema';
 import type { PropertyFilters } from '../types';
 
-interface PropertyFilterBarProps {
+interface PropertyFilterFieldsProps {
   filters: PropertyFilters;
   onChange: (next: PropertyFilters) => void;
   onClear: () => void;
@@ -14,26 +14,13 @@ interface PropertyFilterBarProps {
 
 const DEBOUNCE_MS = 400;
 
-export function PropertyFilterBar({ filters, onChange, onClear }: PropertyFilterBarProps) {
+export function PropertyFilterFields({ filters, onChange, onClear }: PropertyFilterFieldsProps) {
   const { t } = useTranslation('properties');
-  const [q, setQ] = useState(filters.q ?? '');
   const [minPrice, setMinPrice] = useState(filters.minPrice?.toString() ?? '');
   const [maxPrice, setMaxPrice] = useState(filters.maxPrice?.toString() ?? '');
 
-  useEffect(() => setQ(filters.q ?? ''), [filters.q]);
   useEffect(() => setMinPrice(filters.minPrice?.toString() ?? ''), [filters.minPrice]);
   useEffect(() => setMaxPrice(filters.maxPrice?.toString() ?? ''), [filters.maxPrice]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const next = q || undefined;
-      if (next !== (filters.q ?? undefined)) {
-        onChange({ ...filters, q: next, page: 1 });
-      }
-    }, DEBOUNCE_MS);
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -48,14 +35,7 @@ export function PropertyFilterBar({ filters, onChange, onClear }: PropertyFilter
   }, [minPrice, maxPrice]);
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-      <div className="col-span-2 sm:col-span-3">
-        <Input
-          placeholder={t('map.filters.search')}
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-        />
-      </div>
+    <div className="space-y-3">
       <Select
         value={filters.propertyType ?? ''}
         onChange={(e) =>
@@ -107,19 +87,21 @@ export function PropertyFilterBar({ filters, onChange, onClear }: PropertyFilter
           </option>
         ))}
       </Select>
-      <Input
-        type="number"
-        placeholder={t('map.filters.minPrice')}
-        value={minPrice}
-        onChange={(e) => setMinPrice(e.target.value)}
-      />
-      <Input
-        type="number"
-        placeholder={t('map.filters.maxPrice')}
-        value={maxPrice}
-        onChange={(e) => setMaxPrice(e.target.value)}
-      />
-      <Button variant="secondary" onClick={onClear}>
+      <div className="grid grid-cols-2 gap-3">
+        <Input
+          type="number"
+          placeholder={t('map.filters.minPrice')}
+          value={minPrice}
+          onChange={(e) => setMinPrice(e.target.value)}
+        />
+        <Input
+          type="number"
+          placeholder={t('map.filters.maxPrice')}
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+        />
+      </div>
+      <Button variant="secondary" className="w-full" onClick={onClear}>
         {t('map.filters.clear')}
       </Button>
     </div>

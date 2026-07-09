@@ -19,7 +19,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       <input
         ref={ref}
         id={id}
-        className={`w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none ${className}`}
+        className={`w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue sm:text-sm ${className}`}
         {...props}
       />
       {error && <p className="mt-1 text-sm text-red-600">{error}</p>}

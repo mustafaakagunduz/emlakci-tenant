@@ -2,7 +2,7 @@ import type { PropertyStatus } from './types';
 
 export const statusTone: Record<PropertyStatus, 'green' | 'gray' | 'blue' | 'red'> = {
   ACTIVE: 'green',
-  SOLD: 'blue',
+  SOLD: 'gray',
   RENTED: 'blue',
   PASSIVE: 'red',
 };

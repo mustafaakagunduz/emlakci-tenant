@@ -103,7 +103,7 @@
       "minPrice": "Min Fiyat",
       "maxPrice": "Max Fiyat",
       "clear": "Filtreleri Temizle",
-      "openButton": "Filtreler",
+      "openButton": "Filtreleri Göster",
       "title": "Filtreler",
       "apply": "Uygula"
     },
@@ -135,6 +135,9 @@
     "cover": "Kapak",
     "makeCover": "Kapak Yap",
     "delete": "Sil",
+    "ariaClose": "Kapat",
+    "ariaPrevious": "Önceki",
+    "ariaNext": "Sonraki",
     "confirmDeleteTitle": "Fotoğrafı Sil",
     "confirmDeleteMessage": "Bu fotoğrafı silmek istediğinize emin misiniz?",
     "confirm": "Sil",

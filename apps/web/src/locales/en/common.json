@@ -1,0 +1,18 @@
+{
+  "appName": "EmlakPanel",
+  "logout": "Log Out",
+  "back": "Back",
+  "loading": "Loading...",
+  "close": "Close",
+  "noResults": "No results",
+  "nav": {
+    "properties": "Properties",
+    "team": "Team",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "language": {
+    "tr": "TR",
+    "en": "EN"
+  }
+}

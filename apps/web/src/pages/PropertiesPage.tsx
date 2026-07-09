@@ -5,9 +5,10 @@ import { AppLayout } from '../components/layout/AppLayout';
 import { MapView } from '../components/map/MapView';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Modal } from '../components/ui/Modal';
+import { Drawer } from '../components/ui/Drawer';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
-import { PropertyFilterBar } from '../features/properties/components/PropertyFilterBar';
+import { PropertyFilterFields } from '../features/properties/components/PropertyFilterFields';
+import { PropertySearchInput } from '../features/properties/components/PropertySearchInput';
 import { PropertySummaryCard } from '../features/properties/components/PropertySummaryCard';
 import { PropertyThumbnail } from '../features/properties/components/PropertyThumbnail';
 import { formatPrice, statusTone } from '../features/properties/format';
@@ -63,6 +64,7 @@ export function PropertiesPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mobileView, setMobileView] = useState<'map' | 'list'>('list');
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [desktopFiltersOpen, setDesktopFiltersOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const selectedMarker = markers.find((m) => m.id === selectedId) ?? null;
@@ -92,21 +94,25 @@ export function PropertiesPage() {
         </div>
 
         <div
-          className={`h-full min-h-0 w-full flex-col bg-white ${mobileView === 'list' ? 'flex' : 'hidden'} md:flex md:w-[42%] md:border-l md:border-gray-200`}
+          className={`relative h-full min-h-0 w-full flex-col overflow-hidden bg-white ${mobileView === 'list' ? 'flex' : 'hidden'} md:flex md:w-[42%] md:border-l md:border-gray-200`}
         >
           <div className="shrink-0 space-y-3 border-b border-gray-200 p-4">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-gray-900">{t('list.title')}</h1>
-              <Button onClick={() => navigate('/properties/new')}>{t('list.newButton')}</Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  className="hidden md:inline-flex"
+                  onClick={() => setDesktopFiltersOpen(true)}
+                >
+                  {t('map.filters.openButton')}
+                </Button>
+                <Button className="md:hidden" onClick={() => setFiltersOpen(true)}>
+                  {t('map.filters.openButton')}
+                </Button>
+                <Button onClick={() => navigate('/properties/new')}>{t('list.newButton')}</Button>
+              </div>
             </div>
-            <div className="hidden md:block">
-              <PropertyFilterBar filters={filters} onChange={handleFilterChange} onClear={handleClear} />
-            </div>
-            <div className="md:hidden">
-              <Button variant="secondary" onClick={() => setFiltersOpen(true)}>
-                {t('map.filters.openButton')}
-              </Button>
-            </div>
+            <PropertySearchInput filters={filters} onChange={handleFilterChange} />
           </div>
 
           <div className="flex-1 overflow-y-auto p-4">
@@ -120,7 +126,7 @@ export function PropertiesPage() {
                   onClick={() => handleSelectFromList(property)}
                   className={`cursor-pointer rounded-lg border p-3 transition ${
                     selectedId === property.id
-                      ? 'border-gray-900 bg-gray-50'
+                      ? 'border-gray-200 bg-[#f59e0b]'
                       : 'border-gray-200 hover:bg-gray-50'
                   }`}
                 >
@@ -179,6 +185,14 @@ export function PropertiesPage() {
               </Button>
             </div>
           )}
+
+          <Drawer
+            open={desktopFiltersOpen}
+            onClose={() => setDesktopFiltersOpen(false)}
+            title={t('map.filters.title')}
+          >
+            <PropertyFilterFields filters={filters} onChange={handleFilterChange} onClear={handleClear} />
+          </Drawer>
         </div>
       </div>
 
@@ -209,12 +223,12 @@ export function PropertiesPage() {
         </div>
       )}
 
-      <Modal open={filtersOpen} onClose={() => setFiltersOpen(false)} title={t('map.filters.title')}>
-        <PropertyFilterBar filters={filters} onChange={handleFilterChange} onClear={handleClear} />
+      <Drawer open={filtersOpen} onClose={() => setFiltersOpen(false)} title={t('map.filters.title')}>
+        <PropertyFilterFields filters={filters} onChange={handleFilterChange} onClear={handleClear} />
         <div className="mt-4 flex justify-end">
           <Button onClick={() => setFiltersOpen(false)}>{t('map.filters.apply')}</Button>
         </div>
-      </Modal>
+      </Drawer>
 
       <ConfirmDialog
         open={deleteId !== null}

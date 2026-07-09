@@ -1,0 +1,77 @@
+{
+  "title": "Super Admin Panel",
+  "backToList": "Back to Organizations",
+  "organizations": {
+    "title": "Organizations",
+    "newButton": "New Organization",
+    "table": {
+      "name": "Name",
+      "status": "Status",
+      "userCount": "User Count",
+      "createdAt": "Created At"
+    },
+    "empty": "No organizations yet"
+  },
+  "status": {
+    "active": "Active",
+    "passive": "Inactive"
+  },
+  "createOrganization": {
+    "title": "New Organization",
+    "nameLabel": "Organization Name",
+    "submit": "Create",
+    "submitting": "Creating..."
+  },
+  "organizationDetail": {
+    "usersTitle": "Users",
+    "addUserButton": "Add User",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "confirmDeactivateTitle": "Deactivate Organization",
+    "confirmDeactivateMessage": "If you deactivate this organization, all its users will immediately lose the ability to log in. Do you want to continue?",
+    "confirmActivateTitle": "Activate Organization",
+    "confirmActivateMessage": "Do you want to activate this organization again?",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "usersTable": {
+    "fullName": "Full Name",
+    "email": "Email",
+    "role": "Role",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "roles": {
+    "ORG_ADMIN": "Org Admin",
+    "AGENT": "Agent"
+  },
+  "userActions": {
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "resetPassword": "Reset Password",
+    "cannotDeactivateSelf": "You cannot deactivate your own account"
+  },
+  "createUser": {
+    "title": "Add User",
+    "fullNameLabel": "Full Name",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "roleLabel": "Role",
+    "submit": "Add",
+    "submitting": "Adding..."
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "passwordLabel": "New Password",
+    "submit": "Reset",
+    "submitting": "Resetting..."
+  },
+  "errors": {
+    "nameRequired": "Organization name is required",
+    "fullNameRequired": "Full name is required",
+    "emailInvalid": "Enter a valid email address",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "emailConflict": "This email address is already registered",
+    "generic": "Something went wrong, please try again"
+  }
+}

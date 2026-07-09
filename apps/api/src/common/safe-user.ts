@@ -1,8 +1,8 @@
-import { User } from '@prisma/client';
+import { Organization, User } from '@prisma/client';
 
-export type SafeUser = Omit<User, 'passwordHash'>;
+export type SafeUser = Omit<User, 'passwordHash'> & { organizationName: string | null };
 
-export function toSafeUser(user: User & { organization?: unknown }): SafeUser {
-  const { passwordHash: _passwordHash, organization: _organization, ...safeUser } = user;
-  return safeUser;
+export function toSafeUser(user: User & { organization?: Organization | null }): SafeUser {
+  const { passwordHash: _passwordHash, organization, ...safeUser } = user;
+  return { ...safeUser, organizationName: organization?.name ?? null };
 }

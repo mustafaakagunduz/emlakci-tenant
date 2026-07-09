@@ -97,7 +97,12 @@ export interface PropertyMarker {
   currency: string;
   latitude: number;
   longitude: number;
+  city: string;
   district: string;
+  roomCount: string | null;
+  netM2: number | null;
+  ownerName: string | null;
+  ownerPhone: string | null;
   coverPhotoUrl: string | null;
 }
 

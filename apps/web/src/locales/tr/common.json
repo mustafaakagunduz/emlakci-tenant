@@ -1,14 +1,18 @@
 {
   "appName": "EmlakPanel",
-  "dashboard": {
-    "welcome": "Hoş geldiniz, {{fullName}}",
-    "organization": "Organizasyon: {{organizationId}}",
-    "logout": "Çıkış Yap"
-  },
   "logout": "Çıkış Yap",
   "back": "Geri",
+  "loading": "Yükleniyor...",
+  "close": "Kapat",
+  "noResults": "Sonuç yok",
   "nav": {
     "properties": "Portföy",
-    "team": "Ekip"
+    "team": "Ekip",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat"
+  },
+  "language": {
+    "tr": "TR",
+    "en": "EN"
   }
 }

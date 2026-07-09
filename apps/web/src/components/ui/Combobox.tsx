@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ComboboxProps {
   id?: string;
@@ -25,8 +26,9 @@ export function Combobox({
   disabled,
   error,
   loading,
-  emptyMessage = 'Sonuç yok',
+  emptyMessage,
 }: ComboboxProps) {
+  const { t } = useTranslation('common');
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -97,9 +99,9 @@ export function Combobox({
       {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
       {isOpen && !disabled && (
         <ul className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-md border border-gray-200 bg-white text-sm shadow-lg">
-          {loading && <li className="px-3 py-2 text-gray-400">Yükleniyor…</li>}
+          {loading && <li className="px-3 py-2 text-gray-400">{t('loading')}</li>}
           {!loading && options.length === 0 && (
-            <li className="px-3 py-2 text-gray-400">{emptyMessage}</li>
+            <li className="px-3 py-2 text-gray-400">{emptyMessage ?? t('noResults')}</li>
           )}
           {!loading &&
             options.map((option, index) => (

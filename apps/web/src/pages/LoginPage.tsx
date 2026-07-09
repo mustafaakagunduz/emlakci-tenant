@@ -7,6 +7,7 @@ import { useAuth } from '../features/auth/AuthContext';
 import { loginSchema, type LoginFormValues } from '../features/auth/schema';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
+import { LanguageSwitcher } from '../components/ui/LanguageSwitcher';
 
 export function LoginPage() {
   const { t } = useTranslation('auth');
@@ -33,7 +34,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen w-full overflow-hidden bg-gray-900">
+    <div className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-gray-900 p-4 sm:min-h-screen sm:items-stretch sm:justify-start sm:p-0">
       <div className="absolute inset-0">
         <img
           src="/login-bg.jpg"
@@ -43,17 +44,15 @@ export function LoginPage() {
         <div className="absolute inset-0 bg-gradient-to-l from-gray-900/80 via-gray-900/40 to-transparent md:from-gray-900/70 md:via-gray-900/20" />
       </div>
 
-      <div className="relative z-10 flex w-full items-center justify-center bg-white p-6 shadow-2xl sm:w-[440px] sm:flex-none sm:p-10">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-sm">
-          <div className="mb-8 flex items-center gap-2 text-lg font-semibold text-gray-900">
-            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-gray-900/5 text-base">
-              🏠
-            </span>
-            EmlakPanel
-          </div>
+      <div className="relative z-10 flex w-full max-w-sm flex-col items-center justify-center rounded-2xl bg-white p-6 shadow-2xl sm:w-[440px] sm:max-w-none sm:flex-none sm:flex-row sm:rounded-none sm:border-0 sm:border-white/40 sm:bg-white/70 sm:p-10 sm:backdrop-blur-xl">
+        <img
+          src="/pinorex-logo.png"
+          alt="Pinorex"
+          className="mx-auto mb-6 h-auto w-2/3 object-contain sm:absolute sm:left-8 sm:right-8 sm:top-2 sm:mb-0 sm:w-[calc(100%-4rem)]"
+        />
 
-          <h1 className="mb-1 text-2xl font-semibold text-gray-900">{t('title')}</h1>
-          <p className="mb-6 text-sm text-gray-500">{t('subtitle')}</p>
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-sm">
+          <p className="mb-6 text-center text-sm text-gray-500">{t('subtitle')}</p>
 
           <div className="mb-4">
             <Input
@@ -61,6 +60,7 @@ export function LoginPage() {
               type="email"
               label={t('email')}
               autoComplete="email"
+              className="sm:bg-[#f5efe1]"
               error={errors.email ? t(errors.email.message ?? '') : undefined}
               {...register('email')}
             />
@@ -72,6 +72,7 @@ export function LoginPage() {
               type="password"
               label={t('password')}
               autoComplete="current-password"
+              className="sm:bg-[#f5efe1]"
               error={errors.password ? t(errors.password.message ?? '') : undefined}
               {...register('password')}
             />
@@ -83,6 +84,8 @@ export function LoginPage() {
             {isSubmitting ? t('submitting') : t('submit')}
           </Button>
         </form>
+
+        <LanguageSwitcher className="mt-6 justify-center sm:absolute sm:inset-x-0 sm:bottom-6 sm:mt-0" />
       </div>
 
       <div className="relative z-10 hidden flex-1 flex-col justify-end p-12 text-white md:flex">

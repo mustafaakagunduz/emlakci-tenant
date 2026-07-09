@@ -1,0 +1,164 @@
+{
+  "list": {
+    "title": "Properties",
+    "newButton": "Add Property",
+    "searchPlaceholder": "Search by title, address, or owner...",
+    "empty": "No properties yet",
+    "table": {
+      "title": "Title",
+      "type": "Type",
+      "listingType": "Listing Type",
+      "price": "Price",
+      "district": "District",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDeleteTitle": "Delete Property",
+    "confirmDeleteMessage": "Are you sure you want to delete this property? This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel"
+  },
+  "propertyTypes": {
+    "APARTMENT": "Apartment",
+    "SHOP": "Shop",
+    "LAND": "Land",
+    "VILLA": "Villa",
+    "OFFICE": "Office",
+    "BUILDING": "Building",
+    "OTHER": "Other"
+  },
+  "listingTypes": {
+    "SALE": "For Sale",
+    "RENT": "For Rent"
+  },
+  "statuses": {
+    "ACTIVE": "Active",
+    "SOLD": "Sold",
+    "RENTED": "Rented",
+    "PASSIVE": "Inactive"
+  },
+  "form": {
+    "newTitle": "New Property",
+    "editTitle": "Edit Property",
+    "sections": {
+      "basic": "Basic Information",
+      "location": "Location",
+      "details": "Details",
+      "owner": "Owner",
+      "description": "Description"
+    },
+    "fields": {
+      "title": "Title",
+      "propertyType": "Property Type",
+      "listingType": "Listing Type",
+      "status": "Status",
+      "price": "Price",
+      "currency": "Currency",
+      "city": "City",
+      "district": "District",
+      "neighborhood": "Neighborhood",
+      "street": "Street",
+      "addressText": "Full Address",
+      "description": "Description",
+      "ownerName": "Owner Name",
+      "ownerPhone": "Owner Phone",
+      "ownerHint": "This information is for internal office use only and is not shown in listings.",
+      "roomCount": "Room Count",
+      "grossM2": "Gross m²",
+      "netM2": "Net m²",
+      "buildingAge": "Building Age",
+      "floor": "Floor",
+      "totalFloors": "Total Floors",
+      "heatingType": "Heating Type",
+      "monthlyFee": "Monthly Fee",
+      "isFurnished": "Furnished",
+      "zoningStatus": "Zoning Status",
+      "blockNo": "Block No",
+      "parcelNo": "Parcel No"
+    },
+    "submit": "Save",
+    "submitting": "Saving...",
+    "cancel": "Cancel",
+    "location": {
+      "cityPlaceholder": "Type a city (e.g. Ankara)",
+      "districtPlaceholder": "Select a city first",
+      "districtPlaceholderReady": "Type a district",
+      "neighborhoodPlaceholder": "Select a district first",
+      "neighborhoodPlaceholderReady": "Type a neighborhood",
+      "streetPlaceholder": "Select a neighborhood first",
+      "streetPlaceholderReady": "Type a street",
+      "emptyOptions": "No results",
+      "locating": "Locating…",
+      "mapHint": "Select a location on the map or drag the pin to fine-tune it"
+    }
+  },
+  "map": {
+    "filters": {
+      "search": "Search by title, address, or owner...",
+      "allTypes": "All Types",
+      "allListingTypes": "All Listing Types",
+      "allStatuses": "All Statuses",
+      "minPrice": "Min Price",
+      "maxPrice": "Max Price",
+      "clear": "Clear Filters",
+      "openButton": "Show Filters",
+      "title": "Filters",
+      "apply": "Apply"
+    },
+    "summary": {
+      "close": "Close",
+      "goToDetail": "Go to Detail"
+    },
+    "mobile": {
+      "mapTab": "Map",
+      "listTab": "List"
+    },
+    "pagination": {
+      "pageOf": "Page {{page}} / {{total}}"
+    },
+    "empty": "No properties match these filters"
+  },
+  "detail": {
+    "sections": {
+      "basic": "Basic Information"
+    },
+    "ownerBlockTitle": "Owner (Internal Office Info)",
+    "yes": "Yes",
+    "no": "No",
+    "loading": "Loading..."
+  },
+  "photos": {
+    "title": "Photos",
+    "addButton": "Add Photo",
+    "cover": "Cover",
+    "makeCover": "Set as Cover",
+    "delete": "Delete",
+    "ariaClose": "Close",
+    "ariaPrevious": "Previous",
+    "ariaNext": "Next",
+    "confirmDeleteTitle": "Delete Photo",
+    "confirmDeleteMessage": "Are you sure you want to delete this photo?",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "uploading": "Uploading",
+    "uploadError": "Upload failed",
+    "invalidType": "Only image files can be uploaded",
+    "tooLarge": "File cannot be larger than 10MB",
+    "empty": "No photos added yet",
+    "createdHint": "Property created. You can now add photos.",
+    "serviceUnavailable": "Photo upload is currently unavailable (Cloudinary not configured)"
+  },
+  "errors": {
+    "titleRequired": "Title is required",
+    "priceRequired": "Price is required",
+    "pricePositive": "Price must be a positive number",
+    "cityRequired": "City is required",
+    "districtRequired": "District is required",
+    "neighborhoodRequired": "Neighborhood is required",
+    "addressRequired": "Full address is required",
+    "locationRequired": "You must select a location on the map",
+    "generic": "Something went wrong, please try again"
+  }
+}
