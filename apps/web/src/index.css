@@ -5,6 +5,17 @@
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --color-brand-navy: rgb(35 59 101);
   --color-brand-blue: rgb(75 129 247);
+  --animate-nudge: nudge 1.4s ease-in-out infinite;
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-3px);
+  }
 }
 
 body {

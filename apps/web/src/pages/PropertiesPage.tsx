@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Filter, SquarePen, Trash2 } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { ChevronRight, Filter, HousePlus, SquarePen, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
+import { useRailOpen } from '../components/layout/RailContext';
 import { MapView } from '../components/map/MapView';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
@@ -19,11 +20,33 @@ import type {
   ListingType,
   Property,
   PropertyFilters,
+  PropertyMarker,
   PropertyStatus,
   PropertyType,
 } from '../features/properties/types';
 
 const LIST_PAGE_SIZE = 20;
+
+function DesktopSummaryOverlay({
+  marker,
+  onClose,
+}: {
+  marker: PropertyMarker;
+  onClose: () => void;
+}) {
+  const railOpen = useRailOpen();
+
+  return (
+    <div
+      className={`absolute top-4 z-[1160] hidden w-80 max-w-[calc(100%-2rem)] transition-[left] duration-200 ease-in-out md:block ${
+        railOpen ? 'left-52' : 'left-4'
+      }`}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <PropertySummaryCard marker={marker} onClose={onClose} />
+    </div>
+  );
+}
 
 function parseFilters(params: URLSearchParams): PropertyFilters {
   const num = (key: string) => {
@@ -95,31 +118,66 @@ export function PropertiesPage() {
     setMobileView('map');
   };
 
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  const handleListTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleListTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+    if (!start) return;
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+    if (deltaX > 60 && Math.abs(deltaY) < 50) {
+      setMobileView('map');
+    }
+  };
+
   return (
     <AppLayout fullBleed>
-      <div className="flex h-full flex-col md:flex-row">
+      <div className="h-full w-full overflow-hidden md:overflow-visible">
         <div
-          className={`relative h-full w-full ${mobileView === 'map' ? 'block' : 'hidden'} md:block md:w-[58%]`}
+          className={`flex h-full w-[200%] shrink-0 transition-transform duration-300 ease-in-out md:w-full md:translate-x-0 ${
+            mobileView === 'map' ? 'translate-x-0' : '-translate-x-1/2'
+          }`}
         >
-          <MapView markers={markers} selectedId={selectedId} onSelectMarker={setSelectedId} />
-          {selectedMarker && (
-            <div
-              className="absolute left-4 top-4 z-[1000] hidden w-80 max-w-[calc(100%-2rem)] md:block"
-              onClick={(e) => e.stopPropagation()}
+          <div className="relative h-full w-1/2 shrink-0 md:w-[58%]">
+            <MapView markers={markers} selectedId={selectedId} onSelectMarker={setSelectedId} />
+            {selectedMarker && (
+              <DesktopSummaryOverlay marker={selectedMarker} onClose={() => setSelectedId(null)} />
+            )}
+            <button
+              type="button"
+              onClick={() => setMobileView('list')}
+              aria-label={t('map.mobile.listTab')}
+              className="absolute right-0 top-[calc(50%-1.75rem)] z-[1050] flex h-16 w-10 -translate-y-1/2 items-center justify-center rounded-l-lg bg-gray-500/40 text-white md:hidden"
             >
-              <PropertySummaryCard marker={selectedMarker} onClose={() => setSelectedId(null)} />
-            </div>
-          )}
-        </div>
+              <ChevronRight className="h-7 w-7" aria-hidden="true" />
+            </button>
+          </div>
 
-        <div
-          className={`relative h-full min-h-0 w-full flex-col overflow-hidden bg-white ${mobileView === 'list' ? 'flex' : 'hidden'} md:flex md:w-[42%] md:border-l md:border-gray-200`}
-        >
+          <div
+            className="relative flex h-full min-h-0 w-1/2 shrink-0 flex-col overflow-hidden bg-white md:w-[42%] md:border-l md:border-gray-200"
+            onTouchStart={handleListTouchStart}
+            onTouchEnd={handleListTouchEnd}
+          >
           <div className="shrink-0 space-y-3 border-b border-gray-200 p-4">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-gray-900">{t('list.title')}</h1>
               <div className="flex items-center gap-2">
-                <Button onClick={() => navigate('/properties/new')}>{t('list.newButton')}</Button>
+                <Tooltip label={t('list.newButton')}>
+                  <Button
+                    className="!px-2.5"
+                    aria-label={t('list.newButton')}
+                    onClick={() => navigate('/properties/new')}
+                  >
+                    <HousePlus className="h-4 w-4 text-green-400" aria-hidden="true" />
+                  </Button>
+                </Tooltip>
                 <Tooltip label={t('list.edit')}>
                   <Button
                     className="!px-2.5"
@@ -237,10 +295,14 @@ export function PropertiesPage() {
           >
             <PropertyFilterFields filters={filters} onChange={handleFilterChange} onClear={handleClear} />
           </Drawer>
+          </div>
         </div>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-[1100] flex h-14 border-t border-gray-200 bg-white md:hidden">
+      <div
+        className="fixed inset-x-0 bottom-0 z-[1100] flex h-14 border-t border-gray-200 bg-white md:hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
           onClick={() => setMobileView('map')}
