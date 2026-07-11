@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Filter, SquarePen, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
@@ -23,24 +24,6 @@ import type {
 } from '../features/properties/types';
 
 const LIST_PAGE_SIZE = 20;
-
-function FilterIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-4 w-4"
-      aria-hidden="true"
-    >
-      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-    </svg>
-  );
-}
 
 function parseFilters(params: URLSearchParams): PropertyFilters {
   const num = (key: string) => {
@@ -137,27 +120,33 @@ export function PropertiesPage() {
               <h1 className="text-lg font-semibold text-gray-900">{t('list.title')}</h1>
               <div className="flex items-center gap-2">
                 <Button onClick={() => navigate('/properties/new')}>{t('list.newButton')}</Button>
-                <Button
-                  variant="secondary"
-                  disabled={!selectedId}
-                  onClick={() => selectedId && navigate(`/properties/${selectedId}/edit`)}
-                >
-                  {t('list.edit')}
-                </Button>
-                <Button
-                  variant="danger"
-                  disabled={!selectedId}
-                  onClick={() => selectedId && setDeleteId(selectedId)}
-                >
-                  {t('list.delete')}
-                </Button>
+                <Tooltip label={t('list.edit')}>
+                  <Button
+                    className="!px-2.5"
+                    disabled={!selectedId}
+                    aria-label={t('list.edit')}
+                    onClick={() => selectedId && navigate(`/properties/${selectedId}/edit`)}
+                  >
+                    <SquarePen className="h-4 w-4 text-sky-400" aria-hidden="true" />
+                  </Button>
+                </Tooltip>
+                <Tooltip label={t('list.delete')}>
+                  <Button
+                    className="!px-2.5"
+                    disabled={!selectedId}
+                    aria-label={t('list.delete')}
+                    onClick={() => selectedId && setDeleteId(selectedId)}
+                  >
+                    <Trash2 className="h-4 w-4 text-red-500" aria-hidden="true" />
+                  </Button>
+                </Tooltip>
                 <Tooltip label={t('map.filters.openButton')}>
                   <Button
                     className="hidden !px-2.5 md:inline-flex"
                     aria-label={t('map.filters.openButton')}
                     onClick={() => setDesktopFiltersOpen(true)}
                   >
-                    <FilterIcon />
+                    <Filter className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </Tooltip>
                 <Tooltip label={t('map.filters.openButton')}>
@@ -166,7 +155,7 @@ export function PropertiesPage() {
                     aria-label={t('map.filters.openButton')}
                     onClick={() => setFiltersOpen(true)}
                   >
-                    <FilterIcon />
+                    <Filter className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </Tooltip>
               </div>
