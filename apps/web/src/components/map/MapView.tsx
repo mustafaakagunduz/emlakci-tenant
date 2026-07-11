@@ -130,7 +130,12 @@ export function MapView({ markers, selectedId, onSelectMarker }: MapViewProps) {
             key={marker.id}
             position={[marker.latitude, marker.longitude]}
             icon={pinIcon(selected ? SELECTED_COLOR : TONE_COLOR[statusTone[marker.status]], selected ? 36 : 26)}
-            eventHandlers={{ click: () => onSelectMarker(marker.id) }}
+            eventHandlers={{
+              click: (e) => {
+                L.DomEvent.stopPropagation(e.originalEvent);
+                onSelectMarker(marker.id);
+              },
+            }}
           />
         );
       })}

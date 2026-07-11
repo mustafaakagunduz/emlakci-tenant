@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/ui/Button';
 import { formatPrice } from '../format';
-import { PropertyThumbnail } from './PropertyThumbnail';
 import type { PropertyMarker } from '../types';
 
 interface PropertySummaryCardProps {
@@ -21,10 +20,7 @@ export function PropertySummaryCard({ marker, onClose }: PropertySummaryCardProp
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-lg">
       <div className="flex items-start justify-between gap-2">
-        <div className="flex items-start gap-3">
-          <PropertyThumbnail url={marker.coverPhotoUrl} size={48} />
-          <h3 className="font-medium text-gray-900">{marker.title}</h3>
-        </div>
+        <h3 className="font-medium text-gray-900">{marker.title}</h3>
         <button
           type="button"
           onClick={onClose}

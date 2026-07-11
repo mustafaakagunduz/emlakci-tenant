@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
@@ -86,6 +86,20 @@ export function PropertiesPage() {
   const [desktopFiltersOpen, setDesktopFiltersOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!selectedId) return;
+    const clearSelection = () => setSelectedId(null);
+    const clearOnEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') clearSelection();
+    };
+    document.addEventListener('click', clearSelection);
+    document.addEventListener('keydown', clearOnEscape);
+    return () => {
+      document.removeEventListener('click', clearSelection);
+      document.removeEventListener('keydown', clearOnEscape);
+    };
+  }, [selectedId]);
+
   const selectedMarker = markers.find((m) => m.id === selectedId) ?? null;
   const totalPages = data ? Math.max(1, Math.ceil(data.meta.total / data.meta.limit)) : 1;
   const currentPage = filters.page ?? 1;
@@ -106,7 +120,10 @@ export function PropertiesPage() {
         >
           <MapView markers={markers} selectedId={selectedId} onSelectMarker={setSelectedId} />
           {selectedMarker && (
-            <div className="absolute left-4 top-4 z-[1000] hidden w-80 max-w-[calc(100%-2rem)] md:block">
+            <div
+              className="absolute left-4 top-4 z-[1000] hidden w-80 max-w-[calc(100%-2rem)] md:block"
+              onClick={(e) => e.stopPropagation()}
+            >
               <PropertySummaryCard marker={selectedMarker} onClose={() => setSelectedId(null)} />
             </div>
           )}
@@ -120,6 +137,20 @@ export function PropertiesPage() {
               <h1 className="text-lg font-semibold text-gray-900">{t('list.title')}</h1>
               <div className="flex items-center gap-2">
                 <Button onClick={() => navigate('/properties/new')}>{t('list.newButton')}</Button>
+                <Button
+                  variant="secondary"
+                  disabled={!selectedId}
+                  onClick={() => selectedId && navigate(`/properties/${selectedId}/edit`)}
+                >
+                  {t('list.edit')}
+                </Button>
+                <Button
+                  variant="danger"
+                  disabled={!selectedId}
+                  onClick={() => selectedId && setDeleteId(selectedId)}
+                >
+                  {t('list.delete')}
+                </Button>
                 <Tooltip label={t('map.filters.openButton')}>
                   <Button
                     className="hidden !px-2.5 md:inline-flex"
@@ -151,8 +182,11 @@ export function PropertiesPage() {
               {data?.data.map((property) => (
                 <div
                   key={property.id}
-                  onClick={() => handleSelectFromList(property)}
-                  className={`flex h-36 cursor-pointer overflow-hidden rounded-lg border transition ${
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelectFromList(property);
+                  }}
+                  className={`flex h-24 cursor-pointer overflow-hidden rounded-lg border transition ${
                     selectedId === property.id
                       ? 'border-gray-200 bg-[#f59e0b]'
                       : 'border-gray-200 hover:bg-gray-50'
@@ -180,22 +214,6 @@ export function PropertiesPage() {
                       <Badge tone={property.listingType === 'SALE' ? 'blue' : 'gray'}>
                         {t(`listingTypes.${property.listingType}`)}
                       </Badge>
-                    </div>
-                    <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                      <Button
-                        variant="secondary"
-                        className="!px-3 !py-1.5 text-xs"
-                        onClick={() => navigate(`/properties/${property.id}/edit`)}
-                      >
-                        {t('list.edit')}
-                      </Button>
-                      <Button
-                        variant="danger"
-                        className="!px-3 !py-1.5 text-xs"
-                        onClick={() => setDeleteId(property.id)}
-                      >
-                        {t('list.delete')}
-                      </Button>
                     </div>
                   </div>
                 </div>
@@ -255,7 +273,10 @@ export function PropertiesPage() {
       </div>
 
       {selectedMarker && mobileView === 'map' && (
-        <div className="fixed inset-x-0 bottom-14 z-[1100] p-3 md:hidden">
+        <div
+          className="fixed inset-x-0 bottom-14 z-[1100] p-3 md:hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
           <PropertySummaryCard marker={selectedMarker} onClose={() => setSelectedId(null)} />
         </div>
       )}
