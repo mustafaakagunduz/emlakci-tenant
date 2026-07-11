@@ -3,17 +3,26 @@ import { cloudinaryUrl } from '../../../lib/cloudinary';
 interface PropertyThumbnailProps {
   url?: string | null;
   size?: number;
+  fill?: boolean;
+  rounded?: string;
   className?: string;
 }
 
-export function PropertyThumbnail({ url, size = 56, className = '' }: PropertyThumbnailProps) {
-  const style = { width: size, height: size };
+export function PropertyThumbnail({
+  url,
+  size = 56,
+  fill = false,
+  rounded = 'rounded-md',
+  className = '',
+}: PropertyThumbnailProps) {
+  const style = fill ? undefined : { width: size, height: size };
+  const sizeClasses = fill ? 'aspect-square h-full w-auto' : '';
 
   if (!url) {
     return (
       <div
         style={style}
-        className={`flex shrink-0 items-center justify-center rounded-md bg-gray-100 text-gray-300 ${className}`}
+        className={`flex shrink-0 items-center justify-center bg-gray-100 text-gray-300 ${rounded} ${sizeClasses} ${className}`}
       >
         <svg viewBox="0 0 24 24" fill="none" className="h-1/2 w-1/2">
           <path
@@ -36,10 +45,10 @@ export function PropertyThumbnail({ url, size = 56, className = '' }: PropertyTh
 
   return (
     <img
-      src={cloudinaryUrl(url, { w: size * 2, h: size * 2 })}
+      src={cloudinaryUrl(url, fill ? { w: 400, h: 400 } : { w: size * 2, h: size * 2 })}
       style={style}
       alt=""
-      className={`shrink-0 rounded-md object-cover ${className}`}
+      className={`shrink-0 object-cover ${rounded} ${sizeClasses} ${className}`}
     />
   );
 }

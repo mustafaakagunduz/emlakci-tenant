@@ -132,7 +132,6 @@ export function PropertyDetailPage() {
             <h2 className="mb-1 text-sm font-semibold text-amber-900">
               {t('detail.ownerBlockTitle')}
             </h2>
-            <p className="mb-3 text-xs text-amber-700">{t('form.fields.ownerHint')}</p>
             <dl className="grid grid-cols-2 gap-4 text-sm">
               <DetailField label={t('form.fields.ownerName')} value={property.ownerName ?? '—'} />
               <DetailField label={t('form.fields.ownerPhone')} value={property.ownerPhone ?? '—'} />

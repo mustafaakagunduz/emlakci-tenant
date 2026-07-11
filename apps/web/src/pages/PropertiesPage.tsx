@@ -7,6 +7,7 @@ import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Drawer } from '../components/ui/Drawer';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
+import { Tooltip } from '../components/ui/Tooltip';
 import { PropertyFilterFields } from '../features/properties/components/PropertyFilterFields';
 import { PropertySearchInput } from '../features/properties/components/PropertySearchInput';
 import { PropertySummaryCard } from '../features/properties/components/PropertySummaryCard';
@@ -22,6 +23,24 @@ import type {
 } from '../features/properties/types';
 
 const LIST_PAGE_SIZE = 20;
+
+function FilterIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+      aria-hidden="true"
+    >
+      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+    </svg>
+  );
+}
 
 function parseFilters(params: URLSearchParams): PropertyFilters {
   const num = (key: string) => {
@@ -100,16 +119,25 @@ export function PropertiesPage() {
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-gray-900">{t('list.title')}</h1>
               <div className="flex items-center gap-2">
-                <Button
-                  className="hidden md:inline-flex"
-                  onClick={() => setDesktopFiltersOpen(true)}
-                >
-                  {t('map.filters.openButton')}
-                </Button>
-                <Button className="md:hidden" onClick={() => setFiltersOpen(true)}>
-                  {t('map.filters.openButton')}
-                </Button>
                 <Button onClick={() => navigate('/properties/new')}>{t('list.newButton')}</Button>
+                <Tooltip label={t('map.filters.openButton')}>
+                  <Button
+                    className="hidden !px-2.5 md:inline-flex"
+                    aria-label={t('map.filters.openButton')}
+                    onClick={() => setDesktopFiltersOpen(true)}
+                  >
+                    <FilterIcon />
+                  </Button>
+                </Tooltip>
+                <Tooltip label={t('map.filters.openButton')}>
+                  <Button
+                    className="!px-2.5 md:hidden"
+                    aria-label={t('map.filters.openButton')}
+                    onClick={() => setFiltersOpen(true)}
+                  >
+                    <FilterIcon />
+                  </Button>
+                </Tooltip>
               </div>
             </div>
             <PropertySearchInput filters={filters} onChange={handleFilterChange} />
@@ -124,42 +152,51 @@ export function PropertiesPage() {
                 <div
                   key={property.id}
                   onClick={() => handleSelectFromList(property)}
-                  className={`cursor-pointer rounded-lg border p-3 transition ${
+                  className={`flex h-36 cursor-pointer overflow-hidden rounded-lg border transition ${
                     selectedId === property.id
                       ? 'border-gray-200 bg-[#f59e0b]'
                       : 'border-gray-200 hover:bg-gray-50'
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-start gap-3">
-                      <PropertyThumbnail url={property.coverPhotoUrl} size={48} />
-                      <div>
-                        <p className="font-medium text-gray-900">{property.title}</p>
+                  <PropertyThumbnail
+                    url={property.coverPhotoUrl}
+                    fill
+                    rounded="rounded-none"
+                  />
+                  <div className="flex min-w-0 flex-1 flex-col justify-between p-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="truncate font-medium text-gray-900">{property.title}</p>
                         <p className="text-sm text-gray-500">{property.district}</p>
                       </div>
+                      <Badge tone={statusTone[property.status]}>
+                        {t(`statuses.${property.status}`)}
+                      </Badge>
                     </div>
-                    <Badge tone={statusTone[property.status]}>
-                      {t(`statuses.${property.status}`)}
-                    </Badge>
-                  </div>
-                  <div className="mt-2 flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-900">
-                      {formatPrice(property.price, property.currency)}
-                    </span>
-                    <Badge tone={property.listingType === 'SALE' ? 'blue' : 'gray'}>
-                      {t(`listingTypes.${property.listingType}`)}
-                    </Badge>
-                  </div>
-                  <div className="mt-2 flex gap-2" onClick={(e) => e.stopPropagation()}>
-                    <Button
-                      variant="secondary"
-                      onClick={() => navigate(`/properties/${property.id}/edit`)}
-                    >
-                      {t('list.edit')}
-                    </Button>
-                    <Button variant="danger" onClick={() => setDeleteId(property.id)}>
-                      {t('list.delete')}
-                    </Button>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold text-gray-900">
+                        {formatPrice(property.price, property.currency)}
+                      </span>
+                      <Badge tone={property.listingType === 'SALE' ? 'blue' : 'gray'}>
+                        {t(`listingTypes.${property.listingType}`)}
+                      </Badge>
+                    </div>
+                    <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                      <Button
+                        variant="secondary"
+                        className="!px-3 !py-1.5 text-xs"
+                        onClick={() => navigate(`/properties/${property.id}/edit`)}
+                      >
+                        {t('list.edit')}
+                      </Button>
+                      <Button
+                        variant="danger"
+                        className="!px-3 !py-1.5 text-xs"
+                        onClick={() => setDeleteId(property.id)}
+                      >
+                        {t('list.delete')}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}
