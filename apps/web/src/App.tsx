@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './features/auth/AuthContext';
+import { RailProvider } from './components/layout/RailContext';
 import { ProtectedRoute, RoleRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/LoginPage';
 import { PropertiesPage } from './pages/PropertiesPage';
@@ -13,30 +14,32 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
+        <RailProvider>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route element={<RoleRoute allow={['SUPER_ADMIN']} />}>
-              <Route path="/admin" element={<AdminOrganizationsPage />} />
-              <Route
-                path="/admin/organizations/:id"
-                element={<AdminOrganizationDetailPage />}
-              />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<RoleRoute allow={['SUPER_ADMIN']} />}>
+                <Route path="/admin" element={<AdminOrganizationsPage />} />
+                <Route
+                  path="/admin/organizations/:id"
+                  element={<AdminOrganizationDetailPage />}
+                />
+              </Route>
+              <Route element={<RoleRoute allow={['ORG_ADMIN', 'AGENT']} />}>
+                <Route path="/" element={<PropertiesPage />} />
+                <Route path="/properties/new" element={<PropertyFormPage />} />
+                <Route path="/properties/:id/edit" element={<PropertyFormPage />} />
+                <Route path="/properties/:id" element={<PropertyDetailPage />} />
+              </Route>
+              <Route element={<RoleRoute allow={['ORG_ADMIN']} />}>
+                <Route path="/team" element={<TeamPage />} />
+              </Route>
             </Route>
-            <Route element={<RoleRoute allow={['ORG_ADMIN', 'AGENT']} />}>
-              <Route path="/" element={<PropertiesPage />} />
-              <Route path="/properties/new" element={<PropertyFormPage />} />
-              <Route path="/properties/:id/edit" element={<PropertyFormPage />} />
-              <Route path="/properties/:id" element={<PropertyDetailPage />} />
-            </Route>
-            <Route element={<RoleRoute allow={['ORG_ADMIN']} />}>
-              <Route path="/team" element={<TeamPage />} />
-            </Route>
-          </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </RailProvider>
       </AuthProvider>
     </BrowserRouter>
   );

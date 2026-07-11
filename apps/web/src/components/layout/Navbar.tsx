@@ -4,15 +4,15 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../../features/auth/AuthContext';
-import { Button } from '../ui/Button';
-import { LanguageSwitcher } from '../ui/LanguageSwitcher';
 
 const sidebarNavLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `flex items-center gap-3 text-lg font-medium ${isActive ? 'text-brand-navy' : 'text-brand-blue hover:text-brand-navy'}`;
+  `flex items-center gap-3 rounded-lg px-3 py-2 text-lg font-medium transition-colors ${
+    isActive ? 'bg-brand-navy/10 text-brand-navy' : 'text-brand-blue hover:bg-gray-100 hover:text-brand-navy'
+  }`;
 
 const railNavLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `flex items-center whitespace-nowrap text-base font-medium ${
-    isActive ? 'text-brand-navy' : 'text-brand-blue hover:text-brand-navy'
+  `flex w-full items-center whitespace-nowrap text-base font-medium transition-colors ${
+    isActive ? 'bg-brand-navy/10 text-brand-navy' : 'text-brand-blue hover:bg-gray-50 hover:text-brand-navy'
   }`;
 
 const railIconSlotClass = 'flex h-12 w-16 shrink-0 items-center justify-center';
@@ -35,7 +35,7 @@ export function Navbar({ railOpen, onRailOpenChange }: NavbarProps) {
     <header className="relative z-10 h-16 shrink-0 overflow-visible border-b border-gray-200 bg-white">
       {/* Logo solda (masaüstünde eski konumu); hamburger yalnızca mobilde sağda */}
       <div className="flex h-full w-full items-center justify-between gap-3 px-6 sm:px-10">
-        <Link to="/" className="flex h-full items-center sm:relative sm:w-fit">
+        <Link to="/" className="-ml-3 flex h-full items-center sm:relative sm:ml-0 sm:w-fit">
           <img
             src="/pinorex-logo.png"
             alt={t('appName')}
@@ -51,6 +51,10 @@ export function Navbar({ railOpen, onRailOpenChange }: NavbarProps) {
         >
           <Menu className="h-6 w-6" aria-hidden="true" />
         </button>
+
+        <span className="hidden text-sm font-medium text-brand-navy sm:inline">
+          {user?.fullName}
+        </span>
       </div>
 
       {/* Mobil drawer (yalnızca mobilde) */}
@@ -99,11 +103,23 @@ export function Navbar({ railOpen, onRailOpenChange }: NavbarProps) {
               )}
             </nav>
 
-            <div className="shrink-0 p-6">
-              <LanguageSwitcher className="mb-4 justify-center" />
-              <Button variant="danger" onClick={logout} className="w-full bg-red-800 hover:bg-red-900">
+            <div className="shrink-0 border-t border-gray-200 px-6 py-6">
+              <button
+                type="button"
+                onClick={() => i18n.changeLanguage(i18n.language === 'tr' ? 'en' : 'tr')}
+                className="flex w-full items-center gap-3 py-3 text-lg font-medium text-brand-blue hover:text-brand-navy"
+              >
+                <Languages className="h-5 w-5" aria-hidden="true" />
+                {i18n.language === 'tr' ? t('language.tr') : t('language.en')}
+              </button>
+              <button
+                type="button"
+                onClick={logout}
+                className="flex w-full items-center gap-3 py-3 text-lg font-medium text-red-600 hover:text-red-700"
+              >
+                <LogOut className="h-5 w-5" aria-hidden="true" />
                 {t('logout')}
-              </Button>
+              </button>
             </div>
           </div>
         </div>,

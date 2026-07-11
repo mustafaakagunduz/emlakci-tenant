@@ -198,18 +198,18 @@ export function PropertiesPage() {
                     <Trash2 className="h-4 w-4 text-red-500" aria-hidden="true" />
                   </Button>
                 </Tooltip>
-                <Tooltip label={t('map.filters.openButton')}>
+                <Tooltip label={t('map.filters.openButton')} className="!hidden md:!inline-flex">
                   <Button
-                    className="hidden !px-2.5 md:inline-flex"
+                    className="!px-2.5"
                     aria-label={t('map.filters.openButton')}
                     onClick={() => setDesktopFiltersOpen(true)}
                   >
                     <Filter className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </Tooltip>
-                <Tooltip label={t('map.filters.openButton')}>
+                <Tooltip label={t('map.filters.openButton')} className="md:!hidden">
                   <Button
-                    className="!px-2.5 md:hidden"
+                    className="!px-2.5"
                     aria-label={t('map.filters.openButton')}
                     onClick={() => setFiltersOpen(true)}
                   >
