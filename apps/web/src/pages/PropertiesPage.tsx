@@ -233,34 +233,43 @@ export function PropertiesPage() {
                     e.stopPropagation();
                     handleSelectFromList(property);
                   }}
-                  className={`flex h-24 cursor-pointer overflow-hidden rounded-lg border transition ${
+                  className={`relative flex h-24 cursor-pointer overflow-hidden rounded-lg border transition ${
                     selectedId === property.id
                       ? 'border-gray-200 bg-[#f59e0b]'
                       : 'border-gray-200 hover:bg-gray-50'
                   }`}
                 >
-                  <PropertyThumbnail
-                    url={property.coverPhotoUrl}
-                    fill
-                    rounded="rounded-none"
-                  />
+                  <div className="absolute right-0 top-0 flex">
+                    <Badge tone={statusTone[property.status]} className="!rounded-none text-base">
+                      {t(`statuses.${property.status}`)}
+                    </Badge>
+                  </div>
+                  <div className="relative flex shrink-0">
+                    <PropertyThumbnail
+                      url={property.coverPhotoUrl}
+                      fill
+                      rounded="rounded-none"
+                    />
+                    <div className="absolute bottom-0 right-0 flex">
+                      <Badge
+                        tone={property.listingType === 'SALE' ? 'blue' : 'gray'}
+                        className="!rounded-none text-sm"
+                      >
+                        {t(`listingTypes.${property.listingType}`)}
+                      </Badge>
+                    </div>
+                  </div>
                   <div className="flex min-w-0 flex-1 flex-col justify-between p-3">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         <p className="truncate font-medium text-gray-900">{property.title}</p>
                         <p className="text-sm text-gray-500">{property.district}</p>
                       </div>
-                      <Badge tone={statusTone[property.status]}>
-                        {t(`statuses.${property.status}`)}
-                      </Badge>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold text-gray-900">
                         {formatPrice(property.price, property.currency)}
                       </span>
-                      <Badge tone={property.listingType === 'SALE' ? 'blue' : 'gray'}>
-                        {t(`listingTypes.${property.listingType}`)}
-                      </Badge>
                     </div>
                   </div>
                 </div>

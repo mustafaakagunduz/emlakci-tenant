@@ -73,7 +73,7 @@ export class PropertiesService {
         where,
         skip: (page - 1) * limit,
         take: limit,
-        orderBy: { createdAt: 'desc' },
+        orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
         include: { photos: { where: { isCover: true }, take: 1 } },
       }),
       this.prisma.property.count({ where }),
@@ -114,7 +114,7 @@ export class PropertiesService {
         ownerPhone: true,
         photos: { where: { isCover: true }, take: 1, select: { url: true } },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
     });
 
     return rows.map(({ photos, ...rest }) => ({
