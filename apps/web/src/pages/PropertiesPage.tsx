@@ -244,7 +244,7 @@ export function PropertiesPage() {
                   }}
                   className={`relative flex h-24 cursor-pointer overflow-hidden rounded-lg border transition ${
                     selectedId === property.id
-                      ? 'border-gray-200 bg-[#f59e0b]'
+                      ? 'border-2 border-[#f59e0b]'
                       : 'border-gray-200 hover:bg-gray-50'
                   }`}
                 >
