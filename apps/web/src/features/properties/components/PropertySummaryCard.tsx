@@ -1,15 +1,19 @@
+import { SquarePen, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/ui/Button';
+import { Tooltip } from '../../../components/ui/Tooltip';
 import { formatPrice } from '../format';
 import type { PropertyMarker } from '../types';
 
 interface PropertySummaryCardProps {
   marker: PropertyMarker;
   onClose: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
-export function PropertySummaryCard({ marker, onClose }: PropertySummaryCardProps) {
+export function PropertySummaryCard({ marker, onClose, onEdit, onDelete }: PropertySummaryCardProps) {
   const { t } = useTranslation('properties');
   const navigate = useNavigate();
 
@@ -50,9 +54,25 @@ export function PropertySummaryCard({ marker, onClose }: PropertySummaryCardProp
         </p>
       )}
 
-      <Button className="mt-3 w-full" onClick={() => navigate(`/properties/${marker.id}`)}>
-        {t('map.summary.goToDetail')}
-      </Button>
+      <div className="mt-3 flex gap-2">
+        {onEdit && (
+          <Tooltip label={t('list.edit')}>
+            <Button className="!px-2.5" aria-label={t('list.edit')} onClick={onEdit}>
+              <SquarePen className="h-4 w-4 text-white" aria-hidden="true" />
+            </Button>
+          </Tooltip>
+        )}
+        {onDelete && (
+          <Tooltip label={t('list.delete')}>
+            <Button className="!px-2.5" aria-label={t('list.delete')} onClick={onDelete}>
+              <Trash2 className="h-4 w-4 text-white" aria-hidden="true" />
+            </Button>
+          </Tooltip>
+        )}
+        <Button className="flex-1" onClick={() => navigate(`/properties/${marker.id}`)}>
+          {t('map.summary.goToDetail')}
+        </Button>
+      </div>
     </div>
   );
 }

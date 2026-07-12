@@ -184,7 +184,7 @@ export function PropertiesPage() {
                     aria-label={t('list.newButton')}
                     onClick={() => navigate('/properties/new')}
                   >
-                    <HousePlus className="h-4 w-4 text-green-400" aria-hidden="true" />
+                    <HousePlus className="h-4 w-4 text-white" aria-hidden="true" />
                   </Button>
                 </Tooltip>
                 <Tooltip label={t('list.edit')}>
@@ -194,7 +194,7 @@ export function PropertiesPage() {
                     aria-label={t('list.edit')}
                     onClick={() => selectedId && navigate(`/properties/${selectedId}/edit`)}
                   >
-                    <SquarePen className="h-4 w-4 text-sky-400" aria-hidden="true" />
+                    <SquarePen className="h-4 w-4 text-white" aria-hidden="true" />
                   </Button>
                 </Tooltip>
                 <Tooltip label={t('list.delete')}>
@@ -204,7 +204,7 @@ export function PropertiesPage() {
                     aria-label={t('list.delete')}
                     onClick={() => selectedId && setDeleteId(selectedId)}
                   >
-                    <Trash2 className="h-4 w-4 text-red-500" aria-hidden="true" />
+                    <Trash2 className="h-4 w-4 text-white" aria-hidden="true" />
                   </Button>
                 </Tooltip>
                 <Tooltip label={t('map.filters.openButton')} className="!hidden md:!inline-flex">
@@ -346,7 +346,12 @@ export function PropertiesPage() {
           className="fixed inset-x-0 bottom-14 z-[1100] p-3 md:hidden"
           onClick={(e) => e.stopPropagation()}
         >
-          <PropertySummaryCard marker={selectedMarker} onClose={() => setSelectedId(null)} />
+          <PropertySummaryCard
+            marker={selectedMarker}
+            onClose={() => setSelectedId(null)}
+            onEdit={() => navigate(`/properties/${selectedMarker.id}/edit`)}
+            onDelete={() => setDeleteId(selectedMarker.id)}
+          />
         </div>
       )}
 
