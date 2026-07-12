@@ -7,6 +7,7 @@ import type {
   PropertyInput,
   PropertyMarker,
   PropertyPhoto,
+  PublicProperty,
 } from './types';
 
 function buildQuery(filters: PropertyFilters): string {
@@ -33,6 +34,10 @@ export function fetchPropertyMarkers(filters: PropertyFilters): Promise<Property
 
 export function fetchProperty(id: string): Promise<Property> {
   return apiFetch(`/properties/${id}`);
+}
+
+export function fetchPublicProperty(id: string): Promise<PublicProperty> {
+  return apiFetch(`/public/properties/${id}`);
 }
 
 export function createProperty(input: PropertyInput): Promise<Property> {

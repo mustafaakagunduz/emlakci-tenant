@@ -6,6 +6,7 @@ import {
   fetchProperties,
   fetchProperty,
   fetchPropertyMarkers,
+  fetchPublicProperty,
   setCoverPhoto,
   updateProperty,
 } from './api';
@@ -14,6 +15,7 @@ import type { PropertyFilters, PropertyInput } from './types';
 const propertiesKey = (filters: PropertyFilters) => ['properties', filters] as const;
 const propertyKey = (id: string) => ['properties', 'detail', id] as const;
 const markersKey = (filters: PropertyFilters) => ['properties', 'map', filters] as const;
+const publicPropertyKey = (id: string) => ['public-properties', id] as const;
 
 export function useProperties(filters: PropertyFilters) {
   return useQuery({
@@ -34,6 +36,15 @@ export function useProperty(id: string) {
     queryKey: propertyKey(id),
     queryFn: () => fetchProperty(id),
     enabled: !!id,
+  });
+}
+
+export function usePublicProperty(id: string) {
+  return useQuery({
+    queryKey: publicPropertyKey(id),
+    queryFn: () => fetchPublicProperty(id),
+    enabled: !!id,
+    retry: false,
   });
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronRight, Filter, HousePlus, SquarePen, Trash2 } from 'lucide-react';
+import { ChevronRight, Filter, HousePlus, Share2, SquarePen, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
@@ -14,6 +14,7 @@ import { PropertyFilterFields } from '../features/properties/components/Property
 import { PropertySearchInput } from '../features/properties/components/PropertySearchInput';
 import { PropertySummaryCard } from '../features/properties/components/PropertySummaryCard';
 import { PropertyThumbnail } from '../features/properties/components/PropertyThumbnail';
+import { ShareModal } from '../features/properties/components/ShareModal';
 import { formatPrice, statusTone } from '../features/properties/format';
 import { useDeleteProperty, useProperties, usePropertyMarkers } from '../features/properties/hooks';
 import type {
@@ -91,6 +92,7 @@ export function PropertiesPage() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [desktopFiltersOpen, setDesktopFiltersOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
   const [pendingCreateLocation, setPendingCreateLocation] = useState<{
     lat: number;
     lng: number;
@@ -177,7 +179,7 @@ export function PropertiesPage() {
           <div className="shrink-0 space-y-3 border-b border-gray-200 p-4">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-semibold text-gray-900">{t('list.title')}</h1>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                 <Tooltip label={t('list.newButton')}>
                   <Button
                     className="!px-2.5"
@@ -205,6 +207,16 @@ export function PropertiesPage() {
                     onClick={() => selectedId && setDeleteId(selectedId)}
                   >
                     <Trash2 className="h-4 w-4 text-white" aria-hidden="true" />
+                  </Button>
+                </Tooltip>
+                <Tooltip label={t('list.share')}>
+                  <Button
+                    className="!px-2.5"
+                    disabled={!selectedId}
+                    aria-label={t('list.share')}
+                    onClick={() => selectedId && setShareOpen(true)}
+                  >
+                    <Share2 className="h-4 w-4 text-white" aria-hidden="true" />
                   </Button>
                 </Tooltip>
                 <Tooltip label={t('map.filters.openButton')} className="!hidden md:!inline-flex">
@@ -351,6 +363,7 @@ export function PropertiesPage() {
             onClose={() => setSelectedId(null)}
             onEdit={() => navigate(`/properties/${selectedMarker.id}/edit`)}
             onDelete={() => setDeleteId(selectedMarker.id)}
+            onShare={() => setShareOpen(true)}
           />
         </div>
       )}
@@ -361,6 +374,10 @@ export function PropertiesPage() {
           <Button onClick={() => setFiltersOpen(false)}>{t('map.filters.apply')}</Button>
         </div>
       </Drawer>
+
+      {selectedId && (
+        <ShareModal open={shareOpen} onClose={() => setShareOpen(false)} propertyId={selectedId} />
+      )}
 
       <ConfirmDialog
         open={deleteId !== null}

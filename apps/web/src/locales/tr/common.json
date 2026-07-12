@@ -14,5 +14,10 @@
   "language": {
     "tr": "TR",
     "en": "EN"
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "message": "Aradığınız sayfa mevcut değil veya taşınmış olabilir.",
+    "backButton": "Ana Sayfaya Dön"
   }
 }

@@ -15,10 +15,17 @@
     },
     "edit": "Düzenle",
     "delete": "Sil",
+    "share": "Paylaş",
     "confirmDeleteTitle": "Taşınmazı Sil",
     "confirmDeleteMessage": "Bu taşınmazı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
     "confirm": "Sil",
     "cancel": "Vazgeç"
+  },
+  "share": {
+    "modalTitle": "İlanı Paylaş",
+    "linkLabel": "Paylaşım linki:",
+    "copyButton": "Kopyala",
+    "copied": "Paylaşım linki kopyalandı"
   },
   "propertyTypes": {
     "APARTMENT": "Daire",
@@ -153,6 +160,7 @@
     "invalidType": "Yalnızca görsel dosyaları yüklenebilir",
     "tooLarge": "Dosya 10MB'dan büyük olamaz",
     "empty": "Henüz fotoğraf eklenmedi",
+    "fullscreenButton": "Tam Ekran Görüntüle",
     "createdHint": "Taşınmaz oluşturuldu. Şimdi fotoğraf ekleyebilirsiniz.",
     "serviceUnavailable": "Fotoğraf yükleme şu anda kullanılamıyor (Cloudinary yapılandırılmamış)"
   },

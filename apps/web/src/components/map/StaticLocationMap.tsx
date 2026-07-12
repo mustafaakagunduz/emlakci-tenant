@@ -5,22 +5,29 @@ import { DEFAULT_ZOOM, TILE_URL, TILE_ATTRIBUTION } from '../../lib/mapConstants
 interface StaticLocationMapProps {
   latitude: number;
   longitude: number;
+  interactive?: boolean;
+  className?: string;
 }
 
-export function StaticLocationMap({ latitude, longitude }: StaticLocationMapProps) {
+export function StaticLocationMap({
+  latitude,
+  longitude,
+  interactive = false,
+  className = 'h-48 w-full',
+}: StaticLocationMapProps) {
   return (
-    <div className="h-48 w-full overflow-hidden rounded-md border border-gray-300">
+    <div className={`overflow-hidden rounded-md border border-gray-300 ${className}`}>
       <MapContainer
         center={[latitude, longitude]}
         zoom={DEFAULT_ZOOM}
         className="h-full w-full"
-        dragging={false}
-        scrollWheelZoom={false}
-        doubleClickZoom={false}
-        touchZoom={false}
-        boxZoom={false}
-        keyboard={false}
-        zoomControl={false}
+        dragging={interactive}
+        scrollWheelZoom={interactive}
+        doubleClickZoom={interactive}
+        touchZoom={interactive}
+        boxZoom={interactive}
+        keyboard={interactive}
+        zoomControl={interactive}
         attributionControl={false}
       >
         <TileLayer attribution={TILE_ATTRIBUTION} url={TILE_URL} />

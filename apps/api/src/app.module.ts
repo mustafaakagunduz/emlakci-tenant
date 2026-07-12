@@ -12,6 +12,7 @@ import { UsersModule } from './users/users.module';
 import { PropertiesModule } from './properties/properties.module';
 import { PhotosModule } from './photos/photos.module';
 import { GeoModule } from './geo/geo.module';
+import { PublicPropertiesModule } from './public-properties/public-properties.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { GeoModule } from './geo/geo.module';
     PropertiesModule,
     PhotosModule,
     GeoModule,
+    PublicPropertiesModule,
   ],
   providers: [
     { provide: APP_GUARD, useExisting: JwtAuthGuard },

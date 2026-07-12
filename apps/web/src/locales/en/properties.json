@@ -15,10 +15,17 @@
     },
     "edit": "Edit",
     "delete": "Delete",
+    "share": "Share",
     "confirmDeleteTitle": "Delete Property",
     "confirmDeleteMessage": "Are you sure you want to delete this property? This action cannot be undone.",
     "confirm": "Delete",
     "cancel": "Cancel"
+  },
+  "share": {
+    "modalTitle": "Share Listing",
+    "linkLabel": "Share link:",
+    "copyButton": "Copy",
+    "copied": "Share link copied"
   },
   "propertyTypes": {
     "APARTMENT": "Apartment",
@@ -153,6 +160,7 @@
     "invalidType": "Only image files can be uploaded",
     "tooLarge": "File cannot be larger than 10MB",
     "empty": "No photos added yet",
+    "fullscreenButton": "View Fullscreen",
     "createdHint": "Property created. You can now add photos.",
     "serviceUnavailable": "Photo upload is currently unavailable (Cloudinary not configured)"
   },

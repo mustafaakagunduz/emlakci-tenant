@@ -6,19 +6,11 @@ import { StaticLocationMap } from '../components/map/StaticLocationMap';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
+import { DetailField } from '../features/properties/components/DetailField';
 import { PhotoLightbox } from '../features/properties/components/PhotoLightbox';
 import { cloudinaryUrl } from '../lib/cloudinary';
 import { formatPrice, statusTone } from '../features/properties/format';
 import { useDeleteProperty, useProperty } from '../features/properties/hooks';
-
-function DetailField({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="text-gray-500">{label}</dt>
-      <dd className="font-medium text-gray-900">{value}</dd>
-    </div>
-  );
-}
 
 export function PropertyDetailPage() {
   const { id } = useParams<{ id: string }>();

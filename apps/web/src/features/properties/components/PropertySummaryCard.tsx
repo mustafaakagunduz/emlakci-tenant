@@ -1,4 +1,4 @@
-import { SquarePen, Trash2 } from 'lucide-react';
+import { Share2, SquarePen, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/ui/Button';
@@ -11,9 +11,16 @@ interface PropertySummaryCardProps {
   onClose: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
+  onShare?: () => void;
 }
 
-export function PropertySummaryCard({ marker, onClose, onEdit, onDelete }: PropertySummaryCardProps) {
+export function PropertySummaryCard({
+  marker,
+  onClose,
+  onEdit,
+  onDelete,
+  onShare,
+}: PropertySummaryCardProps) {
   const { t } = useTranslation('properties');
   const navigate = useNavigate();
 
@@ -66,6 +73,13 @@ export function PropertySummaryCard({ marker, onClose, onEdit, onDelete }: Prope
           <Tooltip label={t('list.delete')}>
             <Button className="!px-2.5" aria-label={t('list.delete')} onClick={onDelete}>
               <Trash2 className="h-4 w-4 text-white" aria-hidden="true" />
+            </Button>
+          </Tooltip>
+        )}
+        {onShare && (
+          <Tooltip label={t('list.share')}>
+            <Button className="!px-2.5" aria-label={t('list.share')} onClick={onShare}>
+              <Share2 className="h-4 w-4 text-white" aria-hidden="true" />
             </Button>
           </Tooltip>
         )}

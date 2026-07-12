@@ -69,6 +69,45 @@ export interface Property {
   photos?: PropertyPhoto[];
 }
 
+export interface PublicPropertyPhoto {
+  id: string;
+  url: string;
+  isCover: boolean;
+  sortOrder: number;
+}
+
+export interface PublicProperty {
+  id: string;
+  title: string;
+  propertyType: PropertyType;
+  listingType: ListingType;
+  status: PropertyStatus;
+  price: string;
+  currency: string;
+  city: string;
+  district: string;
+  neighborhood: string;
+  street: string | null;
+  addressText: string;
+  latitude: number;
+  longitude: number;
+  description: string | null;
+  roomCount: string | null;
+  grossM2: number | null;
+  netM2: number | null;
+  buildingAge: number | null;
+  floor: number | null;
+  totalFloors: number | null;
+  heatingType: string | null;
+  monthlyFee: string | null;
+  isFurnished: boolean | null;
+  zoningStatus: string | null;
+  blockNo: string | null;
+  parcelNo: string | null;
+  createdAt: string;
+  photos: PublicPropertyPhoto[];
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   meta: { page: number; limit: number; total: number };
