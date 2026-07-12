@@ -61,6 +61,8 @@ export function PropertyFormPage() {
   const { id } = useParams<{ id: string }>();
   const isEdit = !!id;
   const justCreated = Boolean((location.state as { justCreated?: boolean } | null)?.justCreated);
+  const presetLocation = (location.state as { presetLocation?: { lat: number; lng: number } } | null)
+    ?.presetLocation;
 
   const { data: property, isLoading } = useProperty(id ?? '');
   const createProperty = useCreateProperty();
@@ -108,6 +110,7 @@ export function PropertyFormPage() {
         defaultValues={isEdit && property ? toFormDefaults(property) : NEW_DEFAULTS}
         onSubmit={handleSubmit}
         submitError={errorMessage}
+        presetLocation={!isEdit ? presetLocation : undefined}
       />
 
       {isEdit && property && (

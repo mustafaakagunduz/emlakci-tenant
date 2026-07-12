@@ -91,6 +91,10 @@ export function PropertiesPage() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [desktopFiltersOpen, setDesktopFiltersOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [pendingCreateLocation, setPendingCreateLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
 
   useEffect(() => {
     if (!selectedId) return;
@@ -146,7 +150,12 @@ export function PropertiesPage() {
           }`}
         >
           <div className="relative h-full w-1/2 shrink-0 md:w-[58%]">
-            <MapView markers={markers} selectedId={selectedId} onSelectMarker={setSelectedId} />
+            <MapView
+              markers={markers}
+              selectedId={selectedId}
+              onSelectMarker={setSelectedId}
+              onCreateAtLocation={(lat, lng) => setPendingCreateLocation({ lat, lng })}
+            />
             {selectedMarker && (
               <DesktopSummaryOverlay marker={selectedMarker} onClose={() => setSelectedId(null)} />
             )}
@@ -244,7 +253,7 @@ export function PropertiesPage() {
                       {t(`statuses.${property.status}`)}
                     </Badge>
                   </div>
-                  <div className="relative flex shrink-0">
+                  <div className="relative h-24 w-24 shrink-0">
                     <PropertyThumbnail
                       url={property.coverPhotoUrl}
                       fill
@@ -359,6 +368,21 @@ export function PropertiesPage() {
         onConfirm={() => {
           if (deleteId) deleteProperty.mutate(deleteId);
           setDeleteId(null);
+        }}
+      />
+
+      <ConfirmDialog
+        open={pendingCreateLocation !== null}
+        title={t('map.createConfirm.title')}
+        message={t('map.createConfirm.message')}
+        confirmLabel={t('map.createConfirm.confirm')}
+        cancelLabel={t('map.createConfirm.cancel')}
+        onCancel={() => setPendingCreateLocation(null)}
+        onConfirm={() => {
+          if (pendingCreateLocation) {
+            navigate('/properties/new', { state: { presetLocation: pendingCreateLocation } });
+          }
+          setPendingCreateLocation(null);
         }}
       />
     </AppLayout>

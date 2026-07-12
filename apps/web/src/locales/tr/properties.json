@@ -118,7 +118,13 @@
     "pagination": {
       "pageOf": "Sayfa {{page}} / {{total}}"
     },
-    "empty": "Bu filtrelerle eşleşen taşınmaz yok"
+    "empty": "Bu filtrelerle eşleşen taşınmaz yok",
+    "createConfirm": {
+      "title": "Yeni Kayıt Oluştur",
+      "message": "Belirtilen nokta için yeni kayıt oluşturmak istiyor musunuz?",
+      "confirm": "Evet",
+      "cancel": "Vazgeç"
+    }
   },
   "detail": {
     "sections": {

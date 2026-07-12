@@ -16,7 +16,12 @@ export function PropertyThumbnail({
   className = '',
 }: PropertyThumbnailProps) {
   const style = fill ? undefined : { width: size, height: size };
-  const sizeClasses = fill ? 'aspect-square h-full w-auto' : '';
+  // 'aspect-square h-full w-auto' bazı WebKit sürümlerinde (özellikle iOS'ta,
+  // aspect-ratio'nun flex-basis:auto ile birlikte hesaplandığı durumlarda)
+  // genişliği yanlış çözüp thumbnail'ı görünmez biçimde çok geniş bırakıyor,
+  // bu da içerik sütununu sağa itiyor. 'fill' modunda ebatlandırmayı tamamen
+  // ebeveyne (sabit boyutlu wrapper) bırakıp burada sadece kutuyu dolduruyoruz.
+  const sizeClasses = fill ? 'h-full w-full' : '';
 
   if (!url) {
     return (

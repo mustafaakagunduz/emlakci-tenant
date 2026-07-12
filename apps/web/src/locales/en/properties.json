@@ -118,7 +118,13 @@
     "pagination": {
       "pageOf": "Page {{page}} / {{total}}"
     },
-    "empty": "No properties match these filters"
+    "empty": "No properties match these filters",
+    "createConfirm": {
+      "title": "Create New Property",
+      "message": "Do you want to create a new property at the selected location?",
+      "confirm": "Yes",
+      "cancel": "Cancel"
+    }
   },
   "detail": {
     "sections": {

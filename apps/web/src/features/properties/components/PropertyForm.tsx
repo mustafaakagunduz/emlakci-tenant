@@ -26,9 +26,10 @@ interface PropertyFormProps {
   defaultValues: Partial<PropertyFormInput>;
   onSubmit: (values: PropertyFormValues) => Promise<void>;
   submitError?: string;
+  presetLocation?: { lat: number; lng: number };
 }
 
-export function PropertyForm({ defaultValues, onSubmit, submitError }: PropertyFormProps) {
+export function PropertyForm({ defaultValues, onSubmit, submitError, presetLocation }: PropertyFormProps) {
   const { t } = useTranslation('properties');
   const navigate = useNavigate();
 
@@ -173,6 +174,17 @@ export function PropertyForm({ defaultValues, onSubmit, submitError }: PropertyF
       }
     }, 300);
   }
+
+  // Ana sayfadaki haritada çift tıklanan noktadan gelinmişse, harita ve
+  // adres alanlarını o noktaya göre önceden doldur (bkz. PropertiesPage'deki
+  // "yeni kayıt oluştur" onay akışı).
+  useEffect(() => {
+    if (presetLocation) {
+      handleMapChange(presetLocation.lat, presetLocation.lng);
+      setFlyTarget({ lat: presetLocation.lat, lng: presetLocation.lng, zoom: 16 });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(submit)} className="space-y-8">

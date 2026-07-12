@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo } from 'react';
-import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { KONYA_CENTER, DEFAULT_ZOOM, TILE_URL, TILE_ATTRIBUTION } from '../../lib/mapConstants';
 import { statusTone } from '../../features/properties/format';
@@ -106,23 +106,56 @@ function FlyToSelected({ marker }: { marker: PropertyMarker | null }) {
   return null;
 }
 
+// Native 'dblclick' desteği dokunmatik cihazlarda tutarsız olduğu için, çift
+// tık/çift dokunmayı kendi 'click' event'lerimizi zaman+konum eşiğiyle
+// karşılaştırarak tespit ediyoruz — bu hem masaüstü hem mobilde aynı şekilde
+// çalışır. doubleClickZoom kapalı, aksi halde ikinci tık haritayı da yakınlaştırır.
+const DOUBLE_CLICK_THRESHOLD_MS = 400;
+const DOUBLE_CLICK_DISTANCE_DEG = 0.0005;
+
+function DoubleClickToCreate({ onCreate }: { onCreate: (lat: number, lng: number) => void }) {
+  const lastClickRef = useRef<{ time: number; lat: number; lng: number } | null>(null);
+
+  useMapEvents({
+    click(e) {
+      const now = Date.now();
+      const last = lastClickRef.current;
+      if (
+        last &&
+        now - last.time < DOUBLE_CLICK_THRESHOLD_MS &&
+        Math.abs(last.lat - e.latlng.lat) < DOUBLE_CLICK_DISTANCE_DEG &&
+        Math.abs(last.lng - e.latlng.lng) < DOUBLE_CLICK_DISTANCE_DEG
+      ) {
+        lastClickRef.current = null;
+        onCreate(e.latlng.lat, e.latlng.lng);
+      } else {
+        lastClickRef.current = { time: now, lat: e.latlng.lat, lng: e.latlng.lng };
+      }
+    },
+  });
+
+  return null;
+}
+
 interface MapViewProps {
   markers: PropertyMarker[];
   selectedId: string | null;
   onSelectMarker: (id: string) => void;
+  onCreateAtLocation?: (lat: number, lng: number) => void;
 }
 
-export function MapView({ markers, selectedId, onSelectMarker }: MapViewProps) {
+export function MapView({ markers, selectedId, onSelectMarker, onCreateAtLocation }: MapViewProps) {
   const selectedMarker = useMemo(
     () => markers.find((m) => m.id === selectedId) ?? null,
     [markers, selectedId],
   );
 
   return (
-    <MapContainer center={KONYA_CENTER} zoom={DEFAULT_ZOOM} className="h-full w-full">
+    <MapContainer center={KONYA_CENTER} zoom={DEFAULT_ZOOM} doubleClickZoom={false} className="h-full w-full">
       <TileLayer attribution={TILE_ATTRIBUTION} url={TILE_URL} />
       <MapSizeAndBounds markers={markers} />
       <FlyToSelected marker={selectedMarker} />
+      {onCreateAtLocation && <DoubleClickToCreate onCreate={onCreateAtLocation} />}
       {markers.map((marker) => {
         const selected = marker.id === selectedId;
         return (
