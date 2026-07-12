@@ -6,7 +6,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../../features/auth/AuthContext';
 
 const sidebarNavLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `flex items-center gap-3 rounded-lg px-3 py-2 text-lg font-medium transition-colors ${
+  `flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium transition-colors ${
     isActive ? 'bg-brand-navy/10 text-brand-navy' : 'text-brand-blue hover:bg-gray-100 hover:text-brand-navy'
   }`;
 
@@ -90,34 +90,34 @@ export function Navbar({ railOpen, onRailOpenChange }: NavbarProps) {
               </button>
             </div>
 
-            <nav className="flex flex-1 flex-col gap-6 px-6 py-8">
+            <nav className="flex flex-1 flex-col gap-2 px-6 py-6">
               <NavLink to="/" end className={sidebarNavLinkClass} onClick={closeMenu}>
-                <Building2 className="h-5 w-5" aria-hidden="true" />
+                <Building2 className="h-4 w-4" aria-hidden="true" />
                 {t('nav.properties')}
               </NavLink>
               {user?.role === 'ORG_ADMIN' && (
                 <NavLink to="/team" className={sidebarNavLinkClass} onClick={closeMenu}>
-                  <Users className="h-5 w-5" aria-hidden="true" />
+                  <Users className="h-4 w-4" aria-hidden="true" />
                   {t('nav.team')}
                 </NavLink>
               )}
             </nav>
 
-            <div className="shrink-0 border-t border-gray-200 px-6 py-6">
+            <div className="shrink-0 px-6 py-4">
               <button
                 type="button"
                 onClick={() => i18n.changeLanguage(i18n.language === 'tr' ? 'en' : 'tr')}
-                className="flex w-full items-center gap-3 py-3 text-lg font-medium text-brand-blue hover:text-brand-navy"
+                className="flex w-full items-center gap-2 py-1.5 text-base font-medium text-brand-blue hover:text-brand-navy"
               >
-                <Languages className="h-5 w-5" aria-hidden="true" />
+                <Languages className="h-4 w-4" aria-hidden="true" />
                 {i18n.language === 'tr' ? t('language.tr') : t('language.en')}
               </button>
               <button
                 type="button"
                 onClick={logout}
-                className="flex w-full items-center gap-3 py-3 text-lg font-medium text-red-600 hover:text-red-700"
+                className="flex w-full items-center gap-2 py-1.5 text-base font-medium text-red-600 hover:text-red-700"
               >
-                <LogOut className="h-5 w-5" aria-hidden="true" />
+                <LogOut className="h-4 w-4" aria-hidden="true" />
                 {t('logout')}
               </button>
             </div>
@@ -153,11 +153,11 @@ export function Navbar({ railOpen, onRailOpenChange }: NavbarProps) {
             )}
           </nav>
 
-          <div className="shrink-0 border-t border-gray-200 py-4">
+          <div className="shrink-0 py-4">
             <button
               type="button"
               onClick={() => i18n.changeLanguage(i18n.language === 'tr' ? 'en' : 'tr')}
-              className="flex w-full items-center whitespace-nowrap text-base font-medium text-brand-blue hover:text-brand-navy"
+              className="flex w-full items-center whitespace-nowrap text-base font-medium text-brand-blue hover:bg-gray-50 hover:text-brand-navy"
             >
               <span className={railIconSlotClass}>
                 <Languages className="h-5 w-5" aria-hidden="true" />
@@ -167,7 +167,7 @@ export function Navbar({ railOpen, onRailOpenChange }: NavbarProps) {
             <button
               type="button"
               onClick={logout}
-              className="flex w-full items-center whitespace-nowrap text-base font-medium text-red-600 hover:text-red-700"
+              className="flex w-full items-center whitespace-nowrap text-base font-medium text-red-600 hover:bg-gray-50 hover:text-red-700"
             >
               <span className={railIconSlotClass}>
                 <LogOut className="h-5 w-5" aria-hidden="true" />
